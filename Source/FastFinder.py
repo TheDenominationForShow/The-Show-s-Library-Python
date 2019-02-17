@@ -12,10 +12,11 @@ def TimeStampToTime(timestamp):
 	timeStruct = time.localtime(timestamp)
 	return time.strftime('%Y-%m-%d %H:%M:%S',timeStruct)
 
-def GetFileHash( FileName ) :
+# just use only the top 2048 byte
+def FastGetFileHash( FileName ) :
 	hs = hashlib.sha256()
 	with open(FileName,'rb') as f:
-		byte = f.read(512)
+		byte = f.read(2048)
 		hs.update(byte)
 	return hs.hexdigest()
 
@@ -28,7 +29,7 @@ def TraversePathAndGenRecord(rootpath):
 			record = []
 			record.append(name)
 			FileAbsPath = root+'\\'+name
-			h = GetFileHash(FileAbsPath)
+			h = FastGetFileHash(FileAbsPath)
 			record.append(h)
 			record.append(os.path.getsize(FileAbsPath))
 			record.append(TimeStampToTime(os.path.getmtime(FileAbsPath)))
@@ -41,7 +42,6 @@ def GenerateDB(RootPath,DBName = None):
 	if DBName is None:
 		DBName = os.path.basename(os.path.abspath(RootPath))
 		DBName += ".db"
-		DBName = os.path.abspath(RootPath)+ DBName
 	conn = sqlite3.connect(DBName)
 	c = conn.cursor()
 	c.execute('''create table IF NOT EXISTS srclib(
@@ -57,6 +57,7 @@ def GenerateDB(RootPath,DBName = None):
 	values(?,?,?,?,?)''',li)
 	conn.commit()
 	conn.close()
+	logging.info("GenerateDB SECCUSS")
 
 if __name__ == "__main__" :
-	GenerateDB('.','test.db')
+	GenerateDB('H:\MY_INTEREST\Move\h')

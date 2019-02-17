@@ -1,0 +1,8 @@
+# VSCode stuff
+.vscode/
+
+# The database itself.
+*.db
+
+# The log file
+*.log
