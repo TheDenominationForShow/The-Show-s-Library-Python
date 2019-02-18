@@ -1,0 +1,28 @@
+
+syntax = "proto3";
+
+package ShowLibInterface;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc InsertRCHashRecord (RCHashRecord) returns (Result) {}
+}
+
+//
+message RCHashRecord {
+  string hash = 1;
+  string name = 2;
+  string size = 3;
+  string mtime = 4;
+}
+
+// The result
+message Result {
+
+  enum ResultType{
+    SUCCESS = 0;
+    HAS_EXIST = 1;
+  }
+  ResultType RET = 1;
+}

@@ -19,7 +19,9 @@ def ListvedioRC():
     l = []
     for row in conn.execute(''' SELECT * FROM srclib where name like  '%.avi' or name like  '%.MP4' or name like  '%.flv' or name like  '%.rmvb' or name like  '%.wmv' '''):
         l.append(row)
-    for item in l:
+    return l
+def PrintVedioRCList(RCList):
+    for item in RCList:
         print(item[0])
         print("    |__path %s" %item[4])
         print(" ")
