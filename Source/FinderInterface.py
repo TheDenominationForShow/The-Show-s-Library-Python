@@ -1,5 +1,5 @@
 import sqlite3
-DBName = 'Source.db.db'
+DBName = '../The-Show-s-Library-Python.db'
 conn = sqlite3.connect(DBName)
 c = conn.cursor()
 

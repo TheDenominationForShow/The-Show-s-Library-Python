@@ -99,7 +99,7 @@ class Finder:
     def InsertToDB(self,record):
         try:
             self.conn.execute('''insert into srclib (name, hash, size, mtime, path) 
-	            values(?,?,?,?,?)''',record)
+	            values(?,?,?,?,?)''',tuple(record))
             self.conn.commit()
             logging.debug(record)
         except Exception as e:
@@ -110,18 +110,19 @@ class Finder:
         logging.debug(RootPath)
         recordset = []
         for root, dirs, files in os.walk(RootPath) :
+            print(root)
             for name in files :
+                print(name)
                 self.GenRecord(root,name)
-                
         return  recordset    
     def GenerateDB(self):
-        TraversePathAndGenRecord(self.rootdir)
+        self.TraversePathAndGenRecord()
 
 if __name__ == "__main__" :
 	
     old = datetime.datetime.now()
     print(old.strftime('%Y-%m-%d %H:%M:%S.%f'))
-    f = Finder('.')
+    f = Finder('..\\')
     f.GenerateDB()
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
     print(datetime.datetime.now()-old)
