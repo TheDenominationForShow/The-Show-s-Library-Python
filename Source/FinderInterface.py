@@ -1,5 +1,5 @@
 import sqlite3
-DBName = 'h.db'
+DBName = 'test.db'
 conn = sqlite3.connect(DBName)
 c = conn.cursor()
 
@@ -49,8 +49,11 @@ def ListRepeatRC(DBName) :
             print('')
     print('冗余大小约为 %d' %sizeCount)
     conn.close()
+def ShowCount():
+    for row in conn.execute(''' SELECT count(*) FROM srclib'''):
+        print(row)
 
 def test():
     ListRepeatRC(DBName)
 if __name__ == "__main__" :
-    ListvedioRC()
+    ListRepeatRC(DBName)

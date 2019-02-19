@@ -49,7 +49,7 @@ def GenerateDB(RootPath,DBName = None):
 	hash varchar(256) not null,
 	size decimal(19,2) not null,
 	mtime datetime not null,
-	path text not null)
+	path text not null primary key)
 	''')
 	conn.commit()
 	li = TraversePathAndGenRecord(RootPath)

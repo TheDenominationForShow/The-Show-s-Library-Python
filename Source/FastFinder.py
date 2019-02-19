@@ -3,10 +3,10 @@ import sqlite3
 import os
 import time
 import logging
-
+import datetime
 # init log config
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
-logging.basicConfig(filename='my.log', level=logging.DEBUG, format=LOG_FORMAT)
+logging.basicConfig(filename='my.log', level=logging.INFO, format=LOG_FORMAT)
 
 def TimeStampToTime(timestamp):
 	timeStruct = time.localtime(timestamp)
@@ -40,8 +40,11 @@ def TraversePathAndGenRecord(rootpath):
 
 def GenerateDB(RootPath,DBName = None):
 	if DBName is None:
+		logging.info(RootPath)
+		logging.info(os.path.abspath(RootPath))
 		DBName = os.path.basename(os.path.abspath(RootPath))
 		DBName += ".db"
+		logging.info(DBName)
 	conn = sqlite3.connect(DBName)
 	c = conn.cursor()
 	c.execute('''create table IF NOT EXISTS srclib(
@@ -59,5 +62,11 @@ def GenerateDB(RootPath,DBName = None):
 	conn.close()
 	logging.info("GenerateDB SECCUSS")
 
+def test():
+	old = datetime.datetime.now()
+	print(old.strftime('%Y-%m-%d %H:%M:%S.%f'))
+	GenerateDB('F:\\KS安装包\\')
+	print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+	print((datetime.datetime.now()-old))
 if __name__ == "__main__" :
-	GenerateDB('H:\MY_INTEREST\Move\h')
+	test()
