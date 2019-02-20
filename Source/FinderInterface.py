@@ -1,5 +1,5 @@
 import sqlite3
-DBName = 'test.db'
+DBName = '../The-Show-s-Library-Python.db'
 conn = sqlite3.connect(DBName)
 c = conn.cursor()
 
@@ -56,4 +56,4 @@ def ShowCount():
 def test():
     ListRepeatRC(DBName)
 if __name__ == "__main__" :
-    ListRepeatRC(DBName)
+    ShowCount()
