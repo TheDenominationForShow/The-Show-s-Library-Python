@@ -1,8 +1,8 @@
 import sqlite3
-DBName = 'h.db'
+DBName = 'Visual Studio 2017.db'
 conn = sqlite3.connect(DBName)
 c = conn.cursor()
 
-des = c.execute('select count(*) FROM srclib')
-des = c.fetchall()
-print(des)
+des = c.execute('select * FROM srclib where hash = "heh"')
+rc = des.fetchall()
+print(len(rc))

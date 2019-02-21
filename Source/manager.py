@@ -1,5 +1,17 @@
 import sqlite3
 
+class ShowLibManager:
+    def __init__(self):
+        pass
+    def __del__(self):
+        pass
+    # 加载插件
+    def LoadAddin(self):
+        pass
+    def UnLoadAddin(self):
+        pass
+    
+    
 def CreateDB():
     conn = sqlite3.connect("ShowLib.db")
     c = conn.cursor()
@@ -17,9 +29,10 @@ def AddRecordToRCHashTable(record):
     c = conn.cursor()
     try:
         c.execute('''insert into RCHashTable(hash,name,size,mtime) values(?,?,?,?)''',record)
-    except :
-        print("insert error")
-    conn.commit()
+    except Exception as e:
+        print(e)
+    else:
+        conn.commit()
 
 def ShowRecordCount():
     conn = sqlite3.connect("ShowLib.db")
