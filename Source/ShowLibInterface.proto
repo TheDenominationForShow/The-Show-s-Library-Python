@@ -17,12 +17,22 @@ message RCHashRecord {
   string mtime = 4;
 }
 
+message RCLabelRecord{
+  string lable = 1;
+  string hash = 2;
+  string desc = 3;
+  int pro = 4;
+  int com = 5;
+}
+
 // The result
 message Result {
 
   enum ResultType{
     SUCCESS = 0;
-    HAS_EXIST = 1;
+    FAIL = 1;
+    HAS_EXIST = 2;
+
   }
   ResultType RET = 1;
 }
