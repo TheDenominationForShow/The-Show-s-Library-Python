@@ -21,32 +21,58 @@ class ShowLibManager:
     # 卸载插件
     def UnLoadAddin(self):
         pass
+    
     #向资源列表添加hash值
     def AddRecordToRCHashTable(self,record):
-        #conn = sqlite3.connect("ShowLib.db")
-        #self.cur = self.conn.cursor()
+        conn = sqlite3.connect("ShowLib.db")
+        cur = conn.cursor()
         try:
-            self.cur.execute('''insert into RCHashTable(hash,name,size,mtime) values(?,?,?,?)''',record)
-            self.conn.commit()
+            cur.execute('''insert into RCHashTable(hash,name,size,mtime) values(?,?,?,?)''',record)
+            conn.commit()
         except Exception as e:
             print(e)
-    
+        finally:
+            conn.close()
+        #向资源列表添加hash值
+    def AddRecordsToRCHashTable(self,records):
+        conn = sqlite3.connect("ShowLib.db")
+        cur = conn.cursor()
+        for record in records:
+            try:
+                cur.execute('''insert into RCHashTable(hash,name,size,mtime) values(?,?,?,?)''',record)
+                conn.commit()
+            except Exception as e:
+                print(e)
+                continue
+        conn.close()
+
+    #向资源列表添加hash值
+    def AddRecordToRCHashTableNeedConn(self,record,conn):
+        cur = conn.cursor()
+        try:
+            cur.execute('''insert into RCHashTable(hash,name,size,mtime) values(?,?,?,?)''',record)
+            conn.commit()
+        except Exception as e:
+            print(e)
     #打印前100个记录
     def GetRecordList(self):
         conn = sqlite3.connect("ShowLib.db")
         cur = conn.cursor()
         retRecords = []
         try:
-            self.cur.execute('''select  * from RCHashTable''')
-            retRecords = list(self.cur.fetchall())
+            cur.execute('''select  * from RCHashTable''')
+            retRecords = list(cur.fetchall())
         except Exception as e:
             print(e)
         finally :
+            conn.close()
             return retRecords
     #展示记录数
     def ShowRecordCount(self):
+        conn = sqlite3.connect("ShowLib.db")
+        cur = conn.cursor()
         try:
-            self.cur.execute('''select count(*) from RCHashTable''')
+            cur.execute('''select count(*) from RCHashTable''')
             retlist = self.cur.fetchall()
             if len(retlist) == 1:
                 return retlist[0]

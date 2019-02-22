@@ -25,6 +25,7 @@ import ShowLibInterface_pb2_grpc
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 import Manager
+import sqlite3
 class Greeter(ShowLibInterface_pb2_grpc.GreeterServicer):
     def __init__(self):
         self.manger = Manager.ShowLibManager()
@@ -38,10 +39,12 @@ class Greeter(ShowLibInterface_pb2_grpc.GreeterServicer):
         return ShowLibInterface_pb2.Result(RET = 0)
     #批量插入数据
     def InsertRCHashRecords (self, request_iterator, context):
+        conn = sqlite3.connect("ShowLib.db")
         for record in request_iterator:
-            self.manger.AddRecordToRCHashTable(record)
+            self.manger.AddRecordToRCHashTableNeedConn(record,conn)
             ret = ShowLibInterface_pb2.Result(RET = 0)
             yield ret
+        conn.close()
     #获取RCHash记录数
     def GetRCHashCount (self, request, context):
         self.manger.ShowRecordCount()
@@ -54,7 +57,7 @@ class Greeter(ShowLibInterface_pb2_grpc.GreeterServicer):
                 size = record[2],
                 mtime = record[3]
             )
-            
+
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     ShowLibInterface_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
@@ -66,6 +69,8 @@ def serve():
     except KeyboardInterrupt:
         server.stop(0)
 
+LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
+logging.basicConfig(filename='server.log', level=logging.INFO, format=LOG_FORMAT)
 
 if __name__ == '__main__':
     logging.basicConfig()
