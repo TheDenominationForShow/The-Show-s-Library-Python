@@ -4,3 +4,16 @@ The-Show-s-Library for python
 最近守教图书馆陷入了低潮期，没事就写个py版本的玩一玩
 
 setup.py 暂时还不需要去写，另外 gitignore文件也暂时不需要
+
+## 一些常用的东西
+
+Install gRPC:
+
+$ python -m pip install grpcio
+
+python -m pip install grpcio-tools
+
+Generate gRPC code
+python -m grpc_tools.protoc -I../../protos --python_out=. --grpc_python_out=. ../../protos/helloworld.proto
+
+python -m grpc_tools.protoc -I.  --python_out=.  --grpc_python_out=.  ShowLibInterface.proto

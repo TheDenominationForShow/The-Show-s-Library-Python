@@ -5,8 +5,14 @@ package ShowLibInterface;
 
 // The greeting service definition.
 service Greeter {
-  // Sends a greeting
+  // 插入一条
   rpc InsertRCHashRecord (RCHashRecord) returns (Result) {}
+  // 批量插入数据
+  rpc InsertRCHashRecords (stream RCHashRecord) returns (stream Result) {}
+  // 获取RCHash记录数
+  rpc GetRCHashCount (Result) returns (RecordCount) {}
+  // 获取RCHash记录
+  rpc GetRCHashRecords (Result) returns (stream RCHashRecord) {}
 }
 
 //
@@ -21,18 +27,20 @@ message RCLabelRecord{
   string lable = 1;
   string hash = 2;
   string desc = 3;
-  int pro = 4;
-  int com = 5;
+  int32 pro = 4;
+  int32 com = 5;
 }
 
+// 
+message RecordCount{
+  int32 Count = 1;
+}
 // The result
 message Result {
-
   enum ResultType{
     SUCCESS = 0;
     FAIL = 1;
     HAS_EXIST = 2;
-
   }
   ResultType RET = 1;
 }

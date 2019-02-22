@@ -19,6 +19,21 @@ class GreeterStub(object):
         request_serializer=ShowLibInterface__pb2.RCHashRecord.SerializeToString,
         response_deserializer=ShowLibInterface__pb2.Result.FromString,
         )
+    self.InsertRCHashRecords = channel.stream_stream(
+        '/ShowLibInterface.Greeter/InsertRCHashRecords',
+        request_serializer=ShowLibInterface__pb2.RCHashRecord.SerializeToString,
+        response_deserializer=ShowLibInterface__pb2.Result.FromString,
+        )
+    self.GetRCHashCount = channel.unary_unary(
+        '/ShowLibInterface.Greeter/GetRCHashCount',
+        request_serializer=ShowLibInterface__pb2.Result.SerializeToString,
+        response_deserializer=ShowLibInterface__pb2.RecordCount.FromString,
+        )
+    self.GetRCHashRecords = channel.unary_stream(
+        '/ShowLibInterface.Greeter/GetRCHashRecords',
+        request_serializer=ShowLibInterface__pb2.Result.SerializeToString,
+        response_deserializer=ShowLibInterface__pb2.RCHashRecord.FromString,
+        )
 
 
 class GreeterServicer(object):
@@ -26,7 +41,28 @@ class GreeterServicer(object):
   """
 
   def InsertRCHashRecord(self, request, context):
-    """Sends a greeting
+    """插入一条
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def InsertRCHashRecords(self, request_iterator, context):
+    """批量插入数据
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GetRCHashCount(self, request, context):
+    """获取RCHash记录数
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GetRCHashRecords(self, request, context):
+    """获取RCHash记录
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -39,6 +75,21 @@ def add_GreeterServicer_to_server(servicer, server):
           servicer.InsertRCHashRecord,
           request_deserializer=ShowLibInterface__pb2.RCHashRecord.FromString,
           response_serializer=ShowLibInterface__pb2.Result.SerializeToString,
+      ),
+      'InsertRCHashRecords': grpc.stream_stream_rpc_method_handler(
+          servicer.InsertRCHashRecords,
+          request_deserializer=ShowLibInterface__pb2.RCHashRecord.FromString,
+          response_serializer=ShowLibInterface__pb2.Result.SerializeToString,
+      ),
+      'GetRCHashCount': grpc.unary_unary_rpc_method_handler(
+          servicer.GetRCHashCount,
+          request_deserializer=ShowLibInterface__pb2.Result.FromString,
+          response_serializer=ShowLibInterface__pb2.RecordCount.SerializeToString,
+      ),
+      'GetRCHashRecords': grpc.unary_stream_rpc_method_handler(
+          servicer.GetRCHashRecords,
+          request_deserializer=ShowLibInterface__pb2.Result.FromString,
+          response_serializer=ShowLibInterface__pb2.RCHashRecord.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
