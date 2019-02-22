@@ -1,6 +1,10 @@
 import sqlite3
 
+<<<<<<< HEAD
 class Manager:
+=======
+class ShowLibManager:
+>>>>>>> df035332408c30d764c936065de9f7fb751661f3
     def __init__(self):
         self.conn = sqlite3.connect("ShowLib.db")
         self.cur = self.conn.cursor()
@@ -11,9 +15,42 @@ class Manager:
         mtime datetime not null)
         ''')
         self.conn.commit()
+<<<<<<< HEAD
 
     def __del__(self):
         self.conn.close()
+=======
+        self.conn.close()
+    #
+    def __del__(self):
+        pass
+    # 加载插件
+    def LoadAddin(self):
+        pass
+    # 卸载插件
+    def UnLoadAddin(self):
+        pass
+
+    def AddRecordToRCHashTable(self,record):
+        #self.conn = sqlite3.connect("ShowLib.db")
+        #self.cur = self.conn.cursor()
+        try:
+            self.cur.execute('''insert into RCHashTable(hash,name,size,mtime) values(?,?,?,?)''',record)
+        except Exception as e:
+            print(e)
+        else:
+            self.conn.commit()
+
+    def ShowRecordCount(self):
+        for row in self.cur.execute('''select count(*) from RCHashTable'''):
+            print(row)
+
+    def ShowRecordList(self):
+        #conn = sqlite3.connect("ShowLib.db")
+        #c = conn.cursor()
+        for row in self.cur.execute('''select  * from RCHashTable limit 100'''):
+            print(row)
+>>>>>>> df035332408c30d764c936065de9f7fb751661f3
 
     #向资源列表添加hash值
     def AddRecordToRCHashTable(self,record):
