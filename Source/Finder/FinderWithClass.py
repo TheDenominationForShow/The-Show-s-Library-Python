@@ -4,11 +4,13 @@ import os
 import time
 import logging
 import datetime
+from sys import argv
+from greeter_client import ShowLibClient
 # init log config
 #log = logging.getLogger()
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename='finder.log', level=logging.DEBUG, format=LOG_FORMAT)
-
+DBName = "Finder.db"
 def TimeStampToTime(timestamp):
 	timeStruct = time.localtime(timestamp)
 	return time.strftime('%Y-%m-%d %H:%M:%S',timeStruct)
@@ -83,8 +85,12 @@ if __name__ == "__main__" :
 	
     old = datetime.datetime.now()
     print(old.strftime('%Y-%m-%d %H:%M:%S.%f'))
-    f = Finder('..\\')
+    f = Finder(argv[1],'Finder.db')
     f.GenerateDB()
+    clinet = ShowLibClient('jzfamlily.xyz:50051')
+    print(clinet.GetRCHashCount())
+    clinet.InsertRCHashRecords()
+    print(clinet.GetRCHashCount())
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
     print(datetime.datetime.now()-old)
 

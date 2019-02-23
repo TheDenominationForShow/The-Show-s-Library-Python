@@ -22,6 +22,36 @@ import ShowLibInterface_pb2
 import ShowLibInterface_pb2_grpc
 
 import FinderInterface
+LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
+logging.basicConfig(filename='clinet.log', level=logging.INFO, format=LOG_FORMAT)
+class ShowLibClient:
+    def __init__(self,ConnectStr):
+        self.channel = grpc.insecure_channel(ConnectStr)
+        self.stub = ShowLibInterface_pb2_grpc.GreeterStub(self.channel)
+    def __del__(self):
+        self.channel.close()
+    def GenerateRCHashRecord(self):
+        for item in FinderInterface.GetAllRecords():
+            yield ShowLibInterface_pb2.RCHashRecord(hash = item[1],name =item[0],size = str(item[2]),mtime = item[3])
+
+    def InsertRCHashRecords(self):
+        iter = self.GenerateRCHashRecord()
+        print(iter)
+        for res in self.stub.InsertRCHashRecords(iter):
+            logging.info("Greeter client received: " + str(res.RET))
+
+        ##for response in res
+            #
+    def InsertRCHashRecord(self):
+        pass
+    def GetRCHashCount(self):
+        response = self.stub.GetRCHashCount(ShowLibInterface_pb2.Result(RET = 1))
+        logging.debug("Greeter client received : RCHashCount =" + str(response.Count))
+        return response.Count
+    def GetRCHashRecords(self):
+        response = self.stub.GetRCHashCount(ShowLibInterface_pb2.Result(RET = 1))
+        logging.debug("Greeter client received: " + str(response.Count))
+
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs

@@ -1,5 +1,7 @@
 import sqlite3
-
+import logging
+LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
+logging.basicConfig(filename='Manager.log', level=logging.INFO, format=LOG_FORMAT)
 class ShowLibManager:
     def __init__(self):
         self.conn = sqlite3.connect("ShowLib.db")
@@ -53,7 +55,7 @@ class ShowLibManager:
             cur.execute('''insert into RCHashTable(hash,name,size,mtime) values(?,?,?,?)''',record)
             conn.commit()
         except Exception as e:
-            print(e)
+            logging.warn(e)
     #打印前100个记录
     def GetRecordList(self):
         conn = sqlite3.connect("ShowLib.db")
@@ -73,9 +75,9 @@ class ShowLibManager:
         cur = conn.cursor()
         try:
             cur.execute('''select count(*) from RCHashTable''')
-            retlist = self.cur.fetchall()
+            retlist = cur.fetchall()
             if len(retlist) == 1:
-                return retlist[0]
+                return retlist[0][0]
             else :
                 return 0
         except Exception as e:

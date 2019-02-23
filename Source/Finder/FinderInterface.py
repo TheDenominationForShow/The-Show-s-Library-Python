@@ -1,5 +1,5 @@
 import sqlite3
-DBName = '../The-Show-s-Library-Python.db'
+DBName = 'Finder.db'
 conn = sqlite3.connect(DBName)
 c = conn.cursor()
 
@@ -52,6 +52,14 @@ def ListRepeatRC(DBName) :
 def ShowCount():
     for row in conn.execute(''' SELECT count(*) FROM srclib'''):
         print(row)
+
+def GetAllRecords():
+    conn = sqlite3.connect(DBName)
+    cur = conn.cursor()
+    cur.execute(''' SELECT * FROM srclib''')
+    ls = cur.fetchall()
+    conn.close()
+    return ls
 
 def test():
     ListRepeatRC(DBName)

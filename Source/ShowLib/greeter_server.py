@@ -33,28 +33,40 @@ class Greeter(ShowLibInterface_pb2_grpc.GreeterServicer):
         record = []
         record.append(request.hash)
         record.append(request.name)
-        record.append(request.size)
+        record.append(int(request.size,10))
         record.append(request.mtime)
         self.manger.AddRecordToRCHashTable(record)
         return ShowLibInterface_pb2.Result(RET = 0)
     #批量插入数据
     def InsertRCHashRecords (self, request_iterator, context):
-        conn = sqlite3.connect("ShowLib.db")
-        for record in request_iterator:
-            self.manger.AddRecordToRCHashTableNeedConn(record,conn)
-            ret = ShowLibInterface_pb2.Result(RET = 0)
-            yield ret
+        conn = sqlite3.connect("ShowLib.db",check_same_thread = False)
+        print('InsertRCHashRecords')
+        prev_notes = []
+        for new_note in request_iterator:
+            print(new_note)
+            for prev_note in prev_notes:
+                logging.info(prev_note)
+                record = []
+                record.append(prev_note.hash)
+                record.append(prev_note.name)
+                record.append(int(prev_note.size,10))
+                record.append(prev_note.mtime)
+                logging.info(record)
+                self.manger.AddRecordToRCHashTableNeedConn(record,conn)
+                ret = ShowLibInterface_pb2.Result(RET = 0)
+                yield ret
+            prev_notes.append(new_note)
         conn.close()
     #获取RCHash记录数
     def GetRCHashCount (self, request, context):
-        self.manger.ShowRecordCount()
-        return ShowLibInterface_pb2.RecordCount(Count = 0)
+        count = self.manger.ShowRecordCount()
+        return ShowLibInterface_pb2.RecordCount(Count = count)
     #获取RCHash记录
     def GetRCHashRecords (self, request, context): 
         for record in self.manger.GetRecordList():
             yield ShowLibInterface_pb2.RCHashRecord(hash = record[0],
                 name = record[1],
-                size = record[2],
+                size = str(record[2]),
                 mtime = record[3]
             )
 
