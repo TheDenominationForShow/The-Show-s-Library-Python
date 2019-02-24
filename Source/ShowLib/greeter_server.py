@@ -39,23 +39,18 @@ class Greeter(ShowLibInterface_pb2_grpc.GreeterServicer):
         return ShowLibInterface_pb2.Result(RET = 0)
     #批量插入数据
     def InsertRCHashRecords (self, request_iterator, context):
-        conn = sqlite3.connect("ShowLib.db",check_same_thread = False)
-        print('InsertRCHashRecords')
-        prev_notes = []
-        for new_note in request_iterator:
-            print(new_note)
-            for prev_note in prev_notes:
-                logging.info(prev_note)
-                record = []
-                record.append(prev_note.hash)
-                record.append(prev_note.name)
-                record.append(int(prev_note.size,10))
-                record.append(prev_note.mtime)
-                logging.info(record)
-                self.manger.AddRecordToRCHashTableNeedConn(record,conn)
-                ret = ShowLibInterface_pb2.Result(RET = 0)
-                yield ret
-            prev_notes.append(new_note)
+        conn = sqlite3.connect("ShowLib.db")
+        for res in request_iterator:
+            logging.info(res)
+            record = []
+            record.append(res.hash)
+            record.append(res.name)
+            record.append(int(res.size,10))
+            record.append(res.mtime)
+            logging.info(record)
+            self.manger.AddRecordToRCHashTableNeedConn(record,conn)
+            ret = ShowLibInterface_pb2.Result(RET = 0)
+            yield ret
         conn.close()
     #获取RCHash记录数
     def GetRCHashCount (self, request, context):
