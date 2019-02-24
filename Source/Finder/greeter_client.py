@@ -49,8 +49,8 @@ class ShowLibClient:
         logging.debug("Greeter client received : RCHashCount =" + str(response.Count))
         return response.Count
     def GetRCHashRecords(self):
-        response = self.stub.GetRCHashCount(ShowLibInterface_pb2.Result(RET = 1))
-        logging.debug("Greeter client received: " + str(response.Count))
+        for record in self.stub.GetRCHashRecords(ShowLibInterface_pb2.Result(RET = 1)):
+            print(record)
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
