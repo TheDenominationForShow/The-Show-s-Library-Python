@@ -42,7 +42,7 @@ class Finder:
         self.conn.commit()
 
     def __del__(self):
-        print('close')
+        print('finder close')
         self.conn.close()
 
     def initDB(self):
@@ -87,10 +87,10 @@ if __name__ == "__main__" :
     print(old.strftime('%Y-%m-%d %H:%M:%S.%f'))
     f = Finder(argv[1],'Finder.db')
     f.GenerateDB()
-    client = ShowLibClient('jzfamlily.xyz:50000')
+    #client = ShowLibClient('jzfamlily.xyz:50000')
     client = ShowLibClient('localhost:50051')
     print(client.GetRCHashCount())
-    #client.InsertRCHashRecords()
+    client.InsertRCHashRecords()
     client.GetRCHashRecords()
     print(client.GetRCHashCount())
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
