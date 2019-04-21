@@ -21,6 +21,7 @@ class TreeNode:
         self.mtime = None
         self.ctime = None
         self.size = None
+        self.relPath = '.'
     def getFullPath():
         l_path = []
         pathStr = ""
@@ -40,6 +41,7 @@ class DirNode(TreeNode):
     def __init__(self, name):
         TreeNode.__init__(name)
         self.subNodes = []
+        self.objects = []
 
 class FileNode(TreeNode):
     def __init__(self, name):
