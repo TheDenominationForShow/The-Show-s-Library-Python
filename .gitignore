@@ -7,4 +7,6 @@
 # The log file
 *.log
 
+*.pyc
+
 __pycache__/
