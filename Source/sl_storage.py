@@ -97,7 +97,7 @@ class SL_Storage:
         record = self.signature.GenRecord(root,name)
         record.append(str(os.stat(FileAbsPath).st_dev))
         record.append(str(os.stat(FileAbsPath).st_ino))
-        record.append(os.path.getsize(FileAbsPath))
+        record.append(FileAbsPath)
         record.append(TimeStampToTime(os.path.getmtime(FileAbsPath)))
         self.InsertToDB(record)
 
