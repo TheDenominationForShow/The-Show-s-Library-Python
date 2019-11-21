@@ -80,6 +80,8 @@ class SL_Signature:
         for root, dirs, files in os.walk(RootPath) :
             print(root)
             for name in files :
+                if DBName ==  (root+'\\'+name):
+                    continue
                 print(name)
                 self.GenRecord(root,name)
         return  recordset   
