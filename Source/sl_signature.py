@@ -31,7 +31,7 @@ class SL_Signature:
         if DBName is None:
             DBName = os.path.basename(os.path.abspath(rootdir))
             DBName += ".db"
-            DBName = os.path.abspath(rootdir)+'\\'+ DBName
+            DBName = os.path.abspath(rootdir)+os.sep+ DBName
             self.DBName = DBName
             print(DBName)
         self.conn = sqlite3.connect(DBName)
@@ -76,7 +76,7 @@ class SL_Signature:
         #生成单条记录并插入到库
         record = []
         record.append(name)
-        FileAbsPath = root+'\\'+name
+        FileAbsPath = root+os.sep+name
         h = self.GetFileHash(FileAbsPath)
         record.append(h)
         record.append(os.path.getsize(FileAbsPath))
@@ -93,7 +93,7 @@ class SL_Signature:
         for root, dirs, files in os.walk(RootPath) :
             print(root)
             for name in files :
-                if DBName ==  (root+'\\'+name):
+                if DBName ==  (root+os.sep+name):
                     continue
                 print(name)
                 self.GenRecord(root,name)

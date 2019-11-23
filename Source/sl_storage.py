@@ -34,7 +34,7 @@ class SL_Storage:
         if DBName is None :
             DBName = os.path.basename(os.path.abspath(rootdir))
             DBName += ".db"
-            DBName = os.path.abspath(rootdir)+'\\'+ DBName
+            DBName = os.path.abspath(rootdir)+os.sep + DBName
             self.DBName = DBName
             print("dname ="+DBName)
         self.conn = sqlite3.connect(DBName)
