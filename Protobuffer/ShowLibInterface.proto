@@ -10,22 +10,22 @@ service showlibif {
   // 批量插入数据
   rpc InsertRCHashRecords (stream RCHashRecord) returns (stream CommandMsg) {}
   //发布签名数
-  rpc GetRCHashCount (CommandMsg) returns (RecordCount) {}
+  rpc PulishRCHashCount (RecordCount) returns (CommandMsg) {}
   //发布签名
-  rpc GetRCHashCount (CommandMsg) returns (RecordCount) {}
+  rpc PulishRCHashRecords (stream RCHashRecords) returns (CommandMsg) {}
   // 获取签名数
   rpc GetRCHashCount (CommandMsg) returns (RecordCount) {}
   // 获取签名
   rpc GetRCHashRecords (CommandMsg) returns (stream RCHashRecords) {}
   //下载资源
-  rpc DownLoadRC (Result) returns (stream RCByte) {}
+  rpc DownLoadRC (CommandMsg) returns (stream RCByte) {}
   //上传资源
-  rpc UpLoadRC(stream RCByte) returns (Result) {}
+  rpc UpLoadRC(stream RCByte) returns (CommandMsg) {}
 }
 message MsgHeader{
   string  localid = 1;
   string  peerid = 2;
-  int32   senssionid = 3
+  int32   senssionid = 3;
   int32   command = 4;
 }
 
@@ -42,12 +42,13 @@ message RCHashRecord {
 }
 message RCHashRecords {
   MsgHeader header = 1;
-  repeated RCHashRecord = 2;
+  repeated RCHashRecord record = 2;
 }
 
 // 
 message RecordCount{
-  int32 Count = 1;
+  MsgHeader header = 1;
+  int32 Count = 2;
 }
 
 message RCByte{
