@@ -13,9 +13,9 @@ from sl_signature import SL_Signature
 '''
 
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
-logging.basicConfig(filename='Storage.log', level=logging.DEBUG, format=LOG_FORMAT)
-fileHandler = logging.FileHandler(filename='Storage.log',encoding="utf-8")
-logging.getLogger().addHandler(fileHandler)
+#logging.basicConfig(filename='Storage.log', level=logging.DEBUG, format=LOG_FORMAT)
+#fileHandler = logging.FileHandler(filename='Storage.log',encoding="utf-8")
+#logging.getLogger().addHandler(fileHandler)
 DBName = "Storage.db"
 def TimeStampToTime(timestamp):
 	timeStruct = time.localtime(timestamp)
@@ -24,6 +24,12 @@ def TimeStampToTime(timestamp):
 class SL_Storage:
     #存储类
     def __init__(self, rootdir, DBName = None):
+        self.logger = logging.getLogger("Storage")
+        fileHandler = logging.FileHandler(filename='Storage.log',encoding="utf-8")
+        formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+        fileHandler.setFormatter(formatter)
+        self.logger.addHandler(fileHandler)
+        self.logger.setLevel(logging.INFO)
         self.rootdir = rootdir
         if DBName is None :
             DBName = os.path.basename(os.path.abspath(rootdir))
@@ -75,7 +81,7 @@ class SL_Storage:
         RootPath = os.path.abspath(self.rootdir)
         if root_path is not None:
             RootPath = os.path.abspath(self.root_path)
-        logging.debug(RootPath)
+        self.logger.debug(RootPath)
         recordset = []
         for root, dirs, files in os.walk(RootPath) :
             print(root)
@@ -92,10 +98,13 @@ class SL_Storage:
             self.conn.execute('''insert into StorageLib (name, hash, size, idev, inode, path, mtime) 
                 values(?,?,?,?,?,?,?)''',tuple(record))
             self.conn.commit()
-            logging.debug(record)
+            self.logger.info(record)
         except Exception as e:
-            logging.debug("%s  path is %s" %(e,record[5]))
-
+            self.logger.debug("SL_Storage  %s  path is %s" %(e,record[5]))
+            self.cur.close()
+            self.conn.close()
+            self.conn = sqlite3.connect(self.DBName)
+            self.cur = self.conn.cursor()
     def GenRecord(self,root,name):
         #生成单条记录并插入到库
         FileAbsPath = root+'\\'+name
@@ -133,7 +142,11 @@ class SL_Storage:
             hashlist.append(row[0])
         self.conn.commit()
         return hashlist
-    def ShowRepeatRC(self) :
+    def GethashCount(self):
+        for row in self.conn.execute(''' SELECT count(distinct hash) FROM StorageLib'''):
+            print(row)
+        self.conn.commit()
+    def ShowRepeatHashRC(self) :
         l = []
         l = self.GetHashList()
         sizeCount = 0 
@@ -155,7 +168,8 @@ class SL_Storage:
                     index += 1
                 print('')
         print('冗余大小约为 %d' %sizeCount)
-
+    def ShowRepeatNameRC(self) :
+        pass
 if __name__ == "__main__" :
     # 使用xx.py xxx路径
     old = datetime.datetime.now()
@@ -170,6 +184,7 @@ if __name__ == "__main__" :
         print(l)
     elif argv[2] == "ShowRecordsCount":
         f.ShowRecordsCount()
+        f.GethashCount()
     
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
     print(datetime.datetime.now()-old)

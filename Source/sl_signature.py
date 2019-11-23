@@ -13,9 +13,6 @@ from sys import argv
 '''
 
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
-logging.basicConfig(filename='Signature.log', level=logging.DEBUG, format=LOG_FORMAT)
-fileHandler = logging.FileHandler(filename='Signature.log',encoding="utf-8")
-logging.getLogger().addHandler(fileHandler)
 DBName = "Signature.db"
 def TimeStampToTime(timestamp):
 	timeStruct = time.localtime(timestamp)
@@ -24,6 +21,12 @@ def TimeStampToTime(timestamp):
 class SL_Signature:
     #签名类
     def __init__(self, rootdir, DBName = None):
+        self.logger = logging.getLogger("Signature")
+        fileHandler = logging.FileHandler(filename='Signature.log',encoding="utf-8")
+        formatter = logging.Formatter(LOG_FORMAT)
+        fileHandler.setFormatter(formatter)
+        self.logger.addHandler(fileHandler)
+        self.logger.setLevel(logging.INFO)
         self.rootdir = rootdir
         if DBName is None:
             DBName = os.path.basename(os.path.abspath(rootdir))
@@ -48,19 +51,25 @@ class SL_Signature:
         #获取FileName的hash值
         hs = hashlib.sha256()
         with open(FileName,'rb') as f:
-            byte = f.read(512)
-            hs.update(byte)
+            while True:
+                block = f.read(4096)  
+                if block:
+                    hs.update(block)
+                else:
+                    break
         return hs.hexdigest()
-
     def InsertToDB(self,record):
         #将记录插入到数据库
         try:
             self.conn.execute('''insert into SignatureLib (name, hash, size) 
                 values(?,?,?)''',tuple(record))
             self.conn.commit()
-            logging.debug(record)
         except Exception as e:
-            logging.debug("%s  name is %s" %(e,record[0]))
+            self.logger.debug("%s  name is %s" %(e,record[0]))
+            self.cur.close()
+            self.conn.close()
+            self.conn = sqlite3.connect(self.DBName)
+            self.cur = self.conn.cursor()
 
     def GenRecord(self,root,name):
         #生成单条记录并插入到库
