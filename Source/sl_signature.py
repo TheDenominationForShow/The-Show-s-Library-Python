@@ -31,7 +31,7 @@ class SL_Signature:
         if DBName is None:
             DBName = os.path.basename(os.path.abspath(rootdir))
             DBName += ".db"
-            DBName = os.path.abspath(rootdir)+os.sep+ DBName
+            DBName = os.path.abspath(rootdir)+os.sep+".showlib"+ DBName
             self.DBName = DBName
             print(DBName)
         self.conn = sqlite3.connect(DBName)

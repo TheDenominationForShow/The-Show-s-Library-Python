@@ -34,7 +34,7 @@ class SL_Storage:
         if DBName is None :
             DBName = os.path.basename(os.path.abspath(rootdir))
             DBName += ".db"
-            DBName = os.path.abspath(rootdir)+os.sep + DBName
+            DBName = os.path.abspath(rootdir)+os.sep+".showlib" + DBName
             self.DBName = DBName
             print("dname ="+DBName)
         self.conn = sqlite3.connect(DBName)
@@ -147,9 +147,12 @@ class SL_Storage:
         self.conn.commit()
         return ls
     def ShowRecordsCount(self):
+        count = None
         for row in self.conn.execute(''' SELECT count(*) FROM StorageLib'''):
             print(row)
+            count = row[0]
         self.conn.commit()
+        return count
     def GetHashList(self) :
         hashlist = []
         for row in self.conn.execute('SELECT distinct hash FROM StorageLib'):
