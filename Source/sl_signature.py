@@ -14,6 +14,8 @@ from sys import argv
 
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename='Signature.log', level=logging.DEBUG, format=LOG_FORMAT)
+fileHandler = logging.FileHandler(filename='Signature.log',encoding="utf-8")
+logging.getLogger().addHandler(fileHandler)
 DBName = "Signature.db"
 def TimeStampToTime(timestamp):
 	timeStruct = time.localtime(timestamp)

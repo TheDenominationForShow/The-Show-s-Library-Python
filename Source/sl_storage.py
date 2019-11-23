@@ -14,6 +14,8 @@ from sl_signature import SL_Signature
 
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(filename='Storage.log', level=logging.DEBUG, format=LOG_FORMAT)
+fileHandler = logging.FileHandler(filename='Storage.log',encoding="utf-8")
+logging.getLogger().addHandler(fileHandler)
 DBName = "Storage.db"
 def TimeStampToTime(timestamp):
 	timeStruct = time.localtime(timestamp)
@@ -129,7 +131,7 @@ class SL_Storage:
         hashlist = []
         for row in self.conn.execute('SELECT distinct hash FROM StorageLib'):
             hashlist.append(row[0])
-         self.conn.commit()
+        self.conn.commit()
         return hashlist
     def ShowRepeatRC(self) :
         l = []
