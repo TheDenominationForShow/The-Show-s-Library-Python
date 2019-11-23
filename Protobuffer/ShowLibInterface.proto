@@ -1,0 +1,56 @@
+
+syntax = "proto3";
+
+package ShowLibInterface;
+
+// The greeting service definition.
+service showlibif {
+  //命令
+  rpc command(CommandMsg) returns (CommandMsg) {}
+  // 批量插入数据
+  rpc InsertRCHashRecords (stream RCHashRecord) returns (stream CommandMsg) {}
+  //发布签名数
+  rpc GetRCHashCount (CommandMsg) returns (RecordCount) {}
+  //发布签名
+  rpc GetRCHashCount (CommandMsg) returns (RecordCount) {}
+  // 获取签名数
+  rpc GetRCHashCount (CommandMsg) returns (RecordCount) {}
+  // 获取签名
+  rpc GetRCHashRecords (CommandMsg) returns (stream RCHashRecords) {}
+  //下载资源
+  rpc DownLoadRC (Result) returns (stream RCByte) {}
+  //上传资源
+  rpc UpLoadRC(stream RCByte) returns (Result) {}
+}
+message MsgHeader{
+  string  localid = 1;
+  string  peerid = 2;
+  int32   senssionid = 3
+  int32   command = 4;
+}
+
+message CommandMsg{
+  MsgHeader header = 1;
+  repeated string  hash = 2;
+}
+
+//
+message RCHashRecord {
+  string hash = 2;
+  string name = 3;
+  string size = 4;
+}
+message RCHashRecords {
+  MsgHeader header = 1;
+  repeated RCHashRecord = 2;
+}
+
+// 
+message RecordCount{
+  int32 Count = 1;
+}
+
+message RCByte{
+  string blockid = 1;
+  bytes block = 2;
+}
