@@ -29,8 +29,9 @@ class SL_Signature:
         self.logger.setLevel(logging.INFO)
         self.rootdir = rootdir
         if DBName is None:
-            DBName = os.path.basename(os.path.abspath(rootdir))
-            DBName += ".db"
+            #DBName = os.path.basename(os.path.abspath(rootdir))
+            #DBName += ".db"
+            DBName = "Signature.db"
             DBName = os.path.abspath(rootdir)+os.sep+".showlib"+ DBName
             self.DBName = DBName
             print(DBName)
