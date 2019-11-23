@@ -74,7 +74,7 @@ class SL_Storage:
         pass
     def del_path(self):
         pass
-    def scan_path(self,root_path = None):
+    def scan_path(self,root_path = None,rescan = False):
         '''
         扫描路径，生成db
         '''
@@ -82,16 +82,30 @@ class SL_Storage:
         if root_path is not None:
             RootPath = os.path.abspath(self.root_path)
         self.logger.debug(RootPath)
-        recordset = []
+        recordset = self.GetRecords()
         for root, dirs, files in os.walk(RootPath) :
             print(root)
             for name in files :
-                print(name)
-                if root+'\\'+name == self.DBName:
+                if root+os.sep+name == self.DBName:
                     continue
+                if rescan == False:
+                    if self.IsResourceChange(root,name,recordset) != True:
+                        continue
+                print(name)
                 self.GenRecord(root,name)
         return  recordset   
-    
+    def IsResourceChange(self,dir,name,records):
+        rc_stat = os.stat(dir+os.sep+name)
+        record = None
+        for item in records:
+            if item[4] == str(rc_stat.st_ino):
+                record = item
+        if record is None:
+            return True
+        elif record[6] != TimeStampToTime(rc_stat.st_mtime):
+            return True
+        else:
+            return False
     def InsertToDB(self,record):
         #将记录插入到数据库
         try:
@@ -161,13 +175,15 @@ class SL_Storage:
                 for item in ret:
                     print("FileName %s" %item[0])
                     print("    |__size %s" %item[2])
-                    print("    |__Path %s" %item[4])
+                    print("    |__Path %s" %item[5])
                     print('')
                     if index != 0 :
                         sizeCount += item[2]
                     index += 1
                 print('')
-        print('冗余大小约为 %d' %sizeCount)
+        sizeM = sizeCount/1024.0/1024.0
+        sizeg = sizeM/1024.0
+        print('冗余大小约为 %d B == %d M == %d G' %(sizeCount,sizeM,sizeg))
     def ShowRepeatNameRC(self) :
         pass
 if __name__ == "__main__" :
@@ -176,15 +192,19 @@ if __name__ == "__main__" :
     print(old.strftime('%Y-%m-%d %H:%M:%S.%f'))  
     f = SL_Storage(argv[1])
     if argv[2] == "scan":
+        # 扫描文件夹
         f.scan_path()
-    elif argv[2] == "ShowRepeat":
-        f.ShowRepeatRC()
+    elif argv[2] == "ShowRepeatHashRC":
+        #显示重复
+        f.ShowRepeatHashRC()
     elif argv[2] == "ListvedioRC":
         l = f.ListvedioRC()
         print(l)
     elif argv[2] == "ShowRecordsCount":
+        # 显示数目
         f.ShowRecordsCount()
         f.GethashCount()
-    
+    else:
+        print("不能存在方法 "+argv[2]+",您可以利用当前代码自行编写脚本" )
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
     print(datetime.datetime.now()-old)

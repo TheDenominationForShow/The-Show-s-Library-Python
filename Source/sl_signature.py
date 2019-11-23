@@ -32,6 +32,7 @@ class SL_Signature:
             DBName = os.path.basename(os.path.abspath(rootdir))
             DBName += ".db"
             DBName = os.path.abspath(rootdir)+'\\'+ DBName
+            self.DBName = DBName
             print(DBName)
         self.conn = sqlite3.connect(DBName)
         self.cur = self.conn.cursor()
@@ -65,7 +66,7 @@ class SL_Signature:
                 values(?,?,?)''',tuple(record))
             self.conn.commit()
         except Exception as e:
-            self.logger.debug("%s  name is %s" %(e,record[0]))
+            self.logger.warning("%s  name is %s" %(e,record[0]))
             self.cur.close()
             self.conn.close()
             self.conn = sqlite3.connect(self.DBName)
