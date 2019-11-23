@@ -33,7 +33,8 @@ class SL_Signature:
         self.cur.execute('''create table IF NOT EXISTS SignatureLib(
             name varchar(256) not null,
             hash varchar(256) not null,
-            size decimal(19,2) not null)
+            size decimal(19,2) not null,
+            primary key(hash))
             ''')
         self.conn.commit()
 

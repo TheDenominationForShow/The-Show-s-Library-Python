@@ -27,7 +27,8 @@ class SL_Storage:
             DBName = os.path.basename(os.path.abspath(rootdir))
             DBName += ".db"
             DBName = os.path.abspath(rootdir)+'\\'+ DBName
-            print(DBName)
+            self.DBName = DBName
+            print("dname ="+DBName)
         self.conn = sqlite3.connect(DBName)
         self.cur = self.conn.cursor()
         self.cur.execute('''create table IF NOT EXISTS StorageLib(
@@ -78,6 +79,8 @@ class SL_Storage:
             print(root)
             for name in files :
                 print(name)
+                if root+'\\'+name == self.DBName:
+                    continue
                 self.GenRecord(root,name)
         return  recordset   
     
@@ -100,14 +103,71 @@ class SL_Storage:
         record.append(FileAbsPath)
         record.append(TimeStampToTime(os.path.getmtime(FileAbsPath)))
         self.InsertToDB(record)
+    def ListvedioRC(self):
+        #查找视频资源
+        l = []
+        for row in self.conn.execute(''' SELECT * FROM StorageLib where name like  '%.avi' or name like  '%.MP4' or name like  '%.flv' or name like  '%.rmvb' or name like  '%.wmv' '''):
+            l.append(row)
+        self.conn.commit()
+        return l
+    def GetRecord_ByHash(self,hash):
+        l = []
+        for row in self.conn.execute(''' SELECT * FROM StorageLib where hash = ? ''',hash):
+            l.append(row)
+        self.conn.commit()
+        return l
+    def GetRecords(self):
+        self.cur.execute(''' SELECT * FROM StorageLib''')
+        ls = self.cur.fetchall()
+        self.conn.commit()
+        return ls
+    def ShowRecordsCount(self):
+        for row in self.conn.execute(''' SELECT count(*) FROM StorageLib'''):
+            print(row)
+        self.conn.commit()
+    def GetHashList(self) :
+        hashlist = []
+        for row in self.conn.execute('SELECT distinct hash FROM StorageLib'):
+            hashlist.append(row[0])
+         self.conn.commit()
+        return hashlist
+    def ShowRepeatRC(self) :
+        l = []
+        l = self.GetHashList()
+        sizeCount = 0 
+        for h in l:
+            lh = []
+            lh.append(h)
+            ret = self.GetRecord_ByHash(lh)
+            if len(ret) > 1:
+                print('hash is %s num is %d' %(h,len(ret)))
+                print('=========================================')
+                index = 0
+                for item in ret:
+                    print("FileName %s" %item[0])
+                    print("    |__size %s" %item[2])
+                    print("    |__Path %s" %item[4])
+                    print('')
+                    if index != 0 :
+                        sizeCount += item[2]
+                    index += 1
+                print('')
+        print('冗余大小约为 %d' %sizeCount)
 
 if __name__ == "__main__" :
     # 使用xx.py xxx路径
     old = datetime.datetime.now()
-    print(old.strftime('%Y-%m-%d %H:%M:%S.%f'))
-
+    print(old.strftime('%Y-%m-%d %H:%M:%S.%f'))  
     f = SL_Storage(argv[1])
-    f.scan_path()
+    if argv[2] == "scan":
+        f.scan_path()
+    elif argv[2] == "ShowRepeat":
+        f.ShowRepeatRC()
+    elif argv[2] == "ListvedioRC":
+        l = f.ListvedioRC()
+        print(l)
+    elif argv[2] == "ShowRecordsCount":
+        f.ShowRecordsCount()
     
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
     print(datetime.datetime.now()-old)
