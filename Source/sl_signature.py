@@ -83,7 +83,11 @@ class SL_Signature:
         record.append(os.path.getsize(FileAbsPath))
         self.InsertToDB(record)
         return record
-    
+    def GetRecord(self):
+        self.cur.execute(''' SELECT * FROM SignatureLib''')
+        ls = self.cur.fetchall()
+        self.conn.commit()
+        return ls
     def TraversePathAndGenRecord(self,root_path = None):
         #编译路径，存库
         RootPath = os.path.abspath(self.rootdir)

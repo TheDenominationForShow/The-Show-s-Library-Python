@@ -19,3 +19,5 @@ class SL_Command(Enum):
     cmd_subcribe_Storage = 5
     # 发布资源
     cmd_publish_RC = 6
+       # 询问
+    cmd_request = 7

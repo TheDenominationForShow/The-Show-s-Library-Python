@@ -3,7 +3,7 @@
     <ctime>2019-11-24 10:20:50</ctime>
     <mtime>2019-11-24 10:20:50</mtime>
     <storage role="broker" uuid="08660846-0e61-11ea-bb3b-d89ef3948ae4">
-        <ip>[::]</ip>
+        <ip>127.0.0.1</ip>
         <port>50051</port>
     </storage>
     <brokers />

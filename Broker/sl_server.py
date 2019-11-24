@@ -14,6 +14,9 @@ import grpc
 from sl_rpc import SL_Command
 import ShowLibInterface_pb2
 import ShowLibInterface_pb2_grpc
+
+import threading,queue
+
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
     def __init__(self, rootdir, DBName=None):
@@ -27,6 +30,8 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         self.rootdir = os.path.abspath(rootdir)
         self.storage = None
         self.cfg = None
+        self.lock = threading.Lock()
+        self.l = []
     def __del__(self):
         print('SL_Server close')
     def initailize(self):
@@ -56,25 +61,97 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         self.logger.info('SL_Server stop')
 
     def command(self,request, context):
-        #握手和订阅
-        header = ShowLibInterface_pb2.MsgHeader()
-        header.senssionid = request.header.senssionid
-        if request.header.peerid != self.cfg.uuid:
-            header.peerid = request.header.localid
-            header.command = SL_Command.cmd_hello_deny
+        if request.command == SL_Command.cmd_hello.value:
+            #握手
+            header = ShowLibInterface_pb2.MsgHeader(localid="",peerid="",command = 0)
+            header.senssionid = request.header.senssionid
+            if request.header.peerid != self.cfg.uuid:
+                header.peerid = request.header.localid
+                header.command = SL_Command.cmd_hello_deny.value
+                return ShowLibInterface_pb2.CommandMsg(header = header,hash=[])
+            header.command = SL_Command.cmd_empty.value
             return ShowLibInterface_pb2.CommandMsg(header = header,hash=[])
-        header.command = SL_Command.cmd_hello.value
-        return ShowLibInterface_pb2.CommandMsg(header,hash=[])
+        elif request.command == SL_Command.cmd_request.value:
+            header = ShowLibInterface_pb2.MsgHeader(localid="",peerid="",command = 0)
+            header.senssionid = request.header.senssionid
+            if request.header.peerid != self.cfg.uuid:
+                header.peerid = request.header.localid
+                header.command = SL_Command.cmd_empty.value
+                return ShowLibInterface_pb2.CommandMsg(header = header,hash=[])
+            res = None
+            self.lock.acquire()
+            for item in self.l:
+                if item.header.localid == request.header.localid:
+                    res = item
+                    l.remove(item)
+                    break
+            self.lock.release()
+            if res != None:
+                res.header.peerid = request.header.localid
+                res.header.localid =  self.cfg.uuid
+                return ShowLibInterface_pb2.CommandMsg(header = res.header,hash = res.hash)
+            else:
+                print("=,=")
+                return ShowLibInterface_pb2.CommandMsg(header = header,hash = [])
+        elif request.command == SL_Command.cmd_publish_RCHashCount.value:
+            #
+            pass
+        elif request.command == SL_Command.cmd_publish_RCHashRecords.value:
+            self.lock.acquire()
+            self.l.append(request)
+            self.lock.release()
+        elif request.command == SL_Command.cmd_subcribe_RCHash.value:
+            pass
+        elif request.command == SL_Command.cmd_subcribe_Storage.value:
+            self.lock.acquire()
+            self.l.append(request)
+            self.lock.release()
+        elif request.command == SL_Command.cmd_publish_RC.value:
+            pass
+        else:
+            print("暂未实现")
+            pass
+
     def InsertRCHashRecords(self, request_iterator, context):
         pass
     def PulishRCHashCount(self,request, context):
         pass
     def PulishRCHashRecords(self, request_iterator, context):
-        pass
+        for item in request_iterator:
+            sg = SL_Signature(self.rootdir,item.header.peerid)
+            records = []
+            for rec in res.record:
+                record = []
+                record.append(res.record.name)
+                record.append(res.record.hash)
+                record.append(res.record.size)
+                records.append(record)
+            sg.InsertToDB(records)
+        sendheader = ShowLibInterface_pb2.MsgHeader()
+        sendheader.senssionid = res.header.senssionid
+        sendheader.localid = self.cfg.uuid
+        sendheader.peerid = res.header.localid
+        sendheader.command = int(res.header.cmd_empty.value)
+        return ShowLibInterface_pb2.CommandMsg(header = sendheader,hash=[])
     def GetRCHashCount(self,request, context):
         pass
+    def GenRecord(self,req):
+        sendheader = ShowLibInterface_pb2.MsgHeader()
+        sendheader.senssionid = req.header.senssionid
+        sendheader.localid = self.cfg.uuid
+        sendheader.peerid = res.header.localid
+        sendheader.command = int(res.header.cmd_request.value)
+        sg = SL_Signature(self.rootdir)
+        ls = sg.GetRecord()
+        for i in range(0,len(ls)):
+            retl = []
+            size = str(ls[i][2])
+            ShowLibInterface_pb2.RCHashRecord(hash = ls[i][1], name = ls[i][0],size = size )
+            retl.append()
+            yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
     def GetRCHashRecords(self,request, context):
-        pass
+        iter = self.GenRecord(self,req)
+        return  iter 
     def DownLoadRC(self,request, context):
         pass
     def UpLoadRC(self, request_iterator, context):
@@ -82,7 +159,9 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
     def run(self):
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         ShowLibInterface_pb2_grpc.add_showlibifServicer_to_server(self, server)
-        server.add_insecure_port(self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port)
+        connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
+        print(connectStr)
+        server.add_insecure_port(connectStr)
         server.start()
         try:
             while True:

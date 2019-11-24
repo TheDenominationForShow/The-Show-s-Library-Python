@@ -13,9 +13,11 @@ class SL_Command(Enum):
     cmd_publish_RCHashCount = 2
     # 发布仓库签名
     cmd_publish_RCHashRecords = 3
-    # 通过订阅资源
+    # 通过签名订阅资源
     cmd_subcribe_RCHash = 4
     # 订阅仓库签名
     cmd_subcribe_Storage = 5
     # 发布资源
     cmd_publish_RC = 6
+    # 询问
+    cmd_request = 7
