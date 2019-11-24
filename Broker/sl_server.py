@@ -65,7 +65,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         if request.header.command == SL_Command.cmd_hello.value:
             #握手
             msg = "SL_Command.cmd_hello.value" + " id=" +request.header.localid
-            log.info(msg)
+            self.logger.info(msg)
             print("SL_Command.cmd_hello.value")
             header = ShowLibInterface_pb2.MsgHeader(localid="",peerid="",command = 0)
             header.senssionid = request.header.senssionid
@@ -102,7 +102,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
             self.lock.release()
             if res != None:
                 msg = "SL_Command.cmd_request" + " id=" +request.header.localid + " rescommand ="+res.header.command
-                log.info(msg)
+                self.logger.info(msg)
                 res.header.peerid = request.header.localid
                 res.header.localid =  self.cfg.uuid
                 return ShowLibInterface_pb2.CommandMsg(header = res.header,hash = res.hash)
@@ -176,7 +176,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         sg = SL_Signature(self.rootdir)
         ls = sg.GetRecord()
         msg = "GetRCHashRecords" + " id=" +req.header.localid + " len="+str(len(ls))
-        log.info(msg)
+        self.logger.info(msg)
         for i in range(0,len(ls)):
             retl = []
             size = str(ls[i][2])
