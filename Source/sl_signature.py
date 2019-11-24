@@ -35,6 +35,10 @@ class SL_Signature:
             DBName = os.path.abspath(rootdir)+os.sep+".showlib"+os.sep+ DBName
             self.DBName = DBName
             print(DBName)
+        else:
+            DBName = os.path.abspath(rootdir)+os.sep+".showlib"+os.sep+ DBName
+            self.DBName = DBName
+            print(DBName)
         self.conn = sqlite3.connect(DBName)
         self.cur = self.conn.cursor()
         self.cur.execute('''create table IF NOT EXISTS SignatureLib(
@@ -97,6 +101,8 @@ class SL_Signature:
         recordset = []
         for root, dirs, files in os.walk(RootPath) :
             print(root)
+            if os.path.basename(root) == ".showlib":
+                continue
             for name in files :
                 if DBName ==  (root+os.sep+name):
                     continue

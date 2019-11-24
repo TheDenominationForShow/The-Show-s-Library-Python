@@ -64,7 +64,9 @@ class SL_Client:
         msg = "仓库资源 count =" + str(self.storage.ShowRecordsCount())
         print(msg)
         self.logger.info(msg)
-        print("SL_Client initailize success")
+        msg = "SL_Client initailize success"
+        print(msg)
+        self.logger.info(msg)
         return True
 
     def start(self):
@@ -75,29 +77,47 @@ class SL_Client:
         with grpc.insecure_channel(connectStr) as channel:
             stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
             sendheader = ShowLibInterface_pb2.MsgHeader()
-            sendheader.senssionid = 0
+            sendheader.senssionid = 2
             sendheader.localid = self.cfg.uuid
             sendheader.peerid = self.cfg.brokers[0].uuid
-            sendheader.command = int(SL_Command.cmd_hello.value)
-            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = []))
+            sendheader.command = SL_Command.cmd_hello.value
+            l = []
+            print(sendheader)
+            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l))
             if response.header.command == SL_Command.cmd_hello_deny.value:
                 msg = "cmd_hello_deny error id = " +(brokers[0].uuid)
                 print(msg)
                 self.logger.error(msg)
-                return False
+                return Falsel.append()
+            sendheader.command = SL_Command.cmd_subcribe_Storage.value
+            print(sendheader)
+            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l))
+            sendheader.command = SL_Command.cmd_publish_RCHashRecords.value
+            print(sendheader)
+            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l))
+        msg = "SL_Client thread start success"
+        print(msg)
+        self.logger.info(msg)
         #线程接收
         self.run_flag = True
-        self.threadrecv = threading.Thread(target=recv)
-        self.thread_process = threading.Thread(target=process)
+        self.threadrecv = threading.Thread(target=self.recv)
+        self.thread_process = threading.Thread(target=self.process)
         self.threadrecv.start()
         self.thread_process.start()
+        msg = "SL_Client start success"
+        print(msg)
+        self.logger.info(msg)
         return True
     def stop(self):
+        self.run_flag = False
         self.logger.info('SL_Client stop')
+        print("SL_Client stop")
     def recv(self):
+        msg = "recv start"
+        print(msg)
+        self.logger.info(msg)
         #向服务器询问是否有事件需要处理
         while self.run_flag:
-            time.sleep(2*60)
             connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
             with grpc.insecure_channel(connectStr) as channel:
                 stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
@@ -109,11 +129,11 @@ class SL_Client:
                 response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = []))
                 if response.header.command != SL_Command.cmd_empty.value:
                     self.queue.put(response)
-
+            time.sleep(10)
+        self.logger.info("recv end")
     def process(self):
-         while self.run_flag:
-            if self.queue.empty():
-                time.sleep(2*60)
+        self.logger.info("process start")
+        while self.run_flag:
             connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
             with grpc.insecure_channel(connectStr) as channel:
                 stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
@@ -131,41 +151,46 @@ class SL_Client:
                         pass
                     else:
                         print("暂未实现")
-    
+            if self.queue.empty() == True:
+                time.sleep(10)
+        self.logger.info("process end")
     def InsertRCHashRecords(self, stub, res):
         pass
     def PulishRCHashCount(self, stub, res):
         pass
-    def GenRecord(self,res):
+    def GetRecord(self,res):
         sendheader = ShowLibInterface_pb2.MsgHeader()
         sendheader.senssionid = res.header.senssionid
         sendheader.localid = self.cfg.uuid
         sendheader.peerid = res.header.localid
-        sendheader.command = int(res.header.cmd_request.value)
+        sendheader.command = res.header.command
         sg = SL_Signature(self.rootdir)
         ls = sg.GetRecord()
         for i in range(0,len(ls)):
             retl = []
             size = str(ls[i][2])
-            ShowLibInterface_pb2.RCHashRecord(name = ls[i][0],hash = ls[i][1],size = size )
-            retl.append()
+            retl.append(ShowLibInterface_pb2.RCHashRecord(name = ls[i][0],hash = ls[i][1],size = size ))
             yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
 
     def PulishRCHashRecords(self, stub, res):
-        iter = GenRecord()
+        iter = self.GetRecord(res)
         respoense = stub.PulishRCHashRecords(iter)
         print(respoense)
-    def GetRCHashCount(self, stub, res):
 
+    def GetRCHashCount(self, stub, res):
+        pass
     def GetRCHashRecords(self, stub, res):
-        stub.GetRCHashRecords(res)
-        for item in res:
-            sg = SL_Signature(self.rootdir,res.header.peerid)
-            record = []
-            record.append(res.RCHashRecord.name)
-            record.append(res.RCHashRecord.hash)
-            record.append(res.RCHashRecord.size)
-            sg.InsertToDB(record)
+        respoense = stub.GetRCHashRecords(res)
+        for item in respoense:
+            sg = SL_Signature(self.rootdir,item.header.peerid)
+            records = []
+            for rec in item.record:
+                record = []
+                record.append(rec.name)
+                record.append(rec.hash)
+                record.append(rec.size)
+                records.append(record)
+            sg.InsertToDB(records)
     def DownLoadRC(self, stub, res):
         pass
     def UpLoadRC(self, stub, res):
@@ -181,6 +206,11 @@ if __name__ == "__main__" :
     elif argv[2] == "start":
         f.initailize()
         f.start()
+        run_flag = True
+        #while run_flag:
+        stop = input("输入 stop 停止:")
+        if stop == "stop":
+            f.stop()
     else:
         print("不能存在方法 "+argv[2]+",您可以利用当前代码自行编写脚本" )
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))

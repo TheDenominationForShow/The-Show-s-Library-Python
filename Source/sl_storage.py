@@ -86,6 +86,8 @@ class SL_Storage:
         recordset = self.GetRecords()
         for root, dirs, files in os.walk(RootPath) :
             print(root)
+            if os.path.basename(root) == ".showlib":
+                continue
             for name in files :
                 if root+os.sep+name == self.DBName:
                     continue
