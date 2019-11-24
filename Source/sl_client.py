@@ -85,7 +85,7 @@ class SL_Client:
             print(sendheader)
             response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l))
             if response.header.command == SL_Command.cmd_hello_deny.value:
-                msg = "cmd_hello_deny error id = " +(brokers[0].uuid)
+                msg = "cmd_hello_deny error id = " +(self.cfg.brokers[0].uuid)
                 print(msg)
                 self.logger.error(msg)
                 return Falsel.append()
@@ -137,20 +137,23 @@ class SL_Client:
             connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
             with grpc.insecure_channel(connectStr) as channel:
                 stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
-                while self.queue.empty() != True:
-                    res = self.queue.get()
-                    if res.header.command == SL_Command.cmd_publish_RCHashRecords.value:
-                        print("cmd_publish_RCHashRecords")
-                        #处理本地发布
-                        self.PulishRCHashRecords(stub,res)
-                        pass
-                    elif res.header.command == SL_Command.cmd_subcribe_Storage.value:
-                        #处理本地订阅
-                        self.GetRCHashRecords(stub,res)
-                        print("cmd_subcribe_Storage")
-                        pass
-                    else:
-                        print("暂未实现")
+                try:
+                    while self.queue.empty() != True:
+                        res = self.queue.get()
+                        if res.header.command == SL_Command.cmd_publish_RCHashRecords.value:
+                            print("cmd_publish_RCHashRecords")
+                            #处理本地发布
+                            self.PulishRCHashRecords(stub,res)
+                            pass
+                        elif res.header.command == SL_Command.cmd_subcribe_Storage.value:
+                            #处理本地订阅
+                            self.GetRCHashRecords(stub,res)
+                            print("cmd_subcribe_Storage")
+                            pass
+                        else:
+                            print("暂未实现")
+                except expression as e:
+                    self.logger.error(e.msg)
             if self.queue.empty() == True:
                 time.sleep(10)
         self.logger.info("process end")
@@ -164,7 +167,7 @@ class SL_Client:
         sendheader.localid = self.cfg.uuid
         sendheader.peerid = res.header.localid
         sendheader.command = res.header.command
-        sg = SL_Signature(self.rootdir,res.header.localid)
+        sg = SL_Signature(self.rootdir)
         ls = sg.GetRecord()
         for i in range(0,len(ls)):
             retl = []
