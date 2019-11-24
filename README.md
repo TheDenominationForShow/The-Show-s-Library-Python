@@ -6,7 +6,9 @@ The-Show-s-Library for python
 setup.py 暂时还不需要去写，另外 
 
 ## 使用
-首先配置python环境
+* 首先配置python环境
+    * 安装python3
+    * 
 之后使用 sl_storage.py脚本进行操作，命令大致为  sl_storage.py "文件路径" "调用方法"
 
 * sl_storage.py "G:\\图书馆" "scan"  扫描文件夹，生成索引库必须先走这一步
@@ -20,6 +22,7 @@ setup.py 暂时还不需要去写，另外
 
 sudo nohup python -u sl_server.py "." "start" > nohup.out 2>&1 &
 ## 测试
+
 在客户端生成的config.xml `brokers`中添加下测试borker `23.105.207.122` 重启即可进行签名的上传和下载
 ```xml
 <brokers>
