@@ -95,7 +95,7 @@ class SL_Config():
             port = doc.createElement('port')
             storage_node.appendChild(ip)
             storage_node.appendChild(port)
-            ip_text_node = doc.createTextNode("[::]")
+            ip_text_node = doc.createTextNode("23.105.207.122")
             ip.appendChild(ip_text_node)
             port_text_node = doc.createTextNode("50051")
             port.appendChild(port_text_node)

@@ -143,6 +143,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
             '''
             records = []
             for rec in item.record:
+                
                 record = []
                 record.append(rec.name)
                 record.append(rec.hash)
