@@ -90,7 +90,15 @@ class SL_Config():
 
         storage_node.attributes["uuid"] = str(uuid.uuid1())
         storage_node.attributes["role"] = role
-        
+        if role == "broker":
+            ip = doc.createElement('ip')
+            port = doc.createElement('port')
+            storage_node.appendChild(ip)
+            storage_node.appendChild(port)
+            ip_text_node = doc.createTextNode("[::]")
+            ip.appendChild(ip_text_node)
+            port_text_node = doc.createTextNode("50051")
+            port.appendChild(port_text_node)
         with open(self.path,'w',encoding="utf-8") as f:
             f.write(doc.toxml())
 

@@ -182,7 +182,7 @@ class SL_Client:
     def GetRCHashRecords(self, stub, res):
         respoense = stub.GetRCHashRecords(res)
         for item in respoense:
-            sg = SL_Signature(self.rootdir,item.header.peerid)
+            sg = SL_Signature(self.rootdir,item.header.localid)
             '''
             records = []
             for rec in item.record:
@@ -199,7 +199,7 @@ class SL_Client:
                 record.append(rec.hash)
                 record.append(rec.size)
                 sg.InsertToDB(record)
-                
+
     def DownLoadRC(self, stub, res):
         pass
     def UpLoadRC(self, stub, res):
