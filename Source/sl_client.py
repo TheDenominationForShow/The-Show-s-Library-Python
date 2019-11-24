@@ -164,7 +164,7 @@ class SL_Client:
         sendheader.localid = self.cfg.uuid
         sendheader.peerid = res.header.localid
         sendheader.command = res.header.command
-        sg = SL_Signature(self.rootdir)
+        sg = SL_Signature(self.rootdir,res.header.localid)
         ls = sg.GetRecord()
         for i in range(0,len(ls)):
             retl = []

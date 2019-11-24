@@ -137,6 +137,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
     def PulishRCHashCount(self,request, context):
         pass
     def PulishRCHashRecords(self, request_iterator, context):
+        sendheader = ShowLibInterface_pb2.MsgHeader()
         for item in request_iterator:
             sg = SL_Signature(self.rootdir,item.header.localid)
             '''
@@ -155,11 +156,10 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
                 record.append(rec.hash)
                 record.append(rec.size)
                 sg.InsertToDB(record)
-        sendheader = ShowLibInterface_pb2.MsgHeader()
-        sendheader.senssionid = item.header.senssionid
-        sendheader.localid = self.cfg.uuid
-        sendheader.peerid = item.header.localid
-        sendheader.command = SL_Command.cmd_empty.value
+            sendheader.senssionid = item.header.senssionid
+            sendheader.localid = self.cfg.uuid
+            sendheader.peerid = item.header.localid
+            sendheader.command = SL_Command.cmd_empty.value
         return ShowLibInterface_pb2.CommandMsg(header = sendheader,hash=[])
     def GetRCHashCount(self,request, context):
         pass
