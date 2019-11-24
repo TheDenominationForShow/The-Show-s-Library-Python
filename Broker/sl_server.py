@@ -9,7 +9,12 @@ import logging
 import datetime
 from sys import argv
 from sl_config import SL_Config,Broker_struct
-class SL_Server:
+import grpc
+from sl_rpc import SL_Command
+import ShowLibInterface_pb2
+import showlibifServicer from ShowLibInterface_pb2_grpc
+_ONE_DAY_IN_SECONDS = 60 * 60 * 24
+class SL_Server(showlibifServicer):
     def __init__(self, rootdir, DBName=None):
         self.logger = logging.getLogger("Server")
         fileHandler = logging.FileHandler(
@@ -43,13 +48,47 @@ class SL_Server:
 
     def start(self):
         self.logger.info('SL_Server start')
-        #向服务器推送
-        
-        #线程接收
-
+        #启动
+        self.run()
         pass
     def stop(self):
-        self.logger.info('SL_Server stop')    
+        self.logger.info('SL_Server stop')
+
+    def command(self,request, context):
+        #握手和订阅
+        header = ShowLibInterface_pb2.MsgHeader()
+        header.senssionid = request.header.senssionid
+        if request.header.peerid != self.cfg.uuid:
+            header.peerid = request.header.localid
+            header.command = SL_Command.cmd_hello_deny
+            return ShowLibInterface_pb2.CommandMsg(header,hash="")
+        header.command = SL_Command.cmd_hello
+        return ShowLibInterface_pb2.CommandMsg(header,hash="")
+    def InsertRCHashRecords(self, request_iterator, context):
+        pass
+    def PulishRCHashCount(self,request, context):
+        pass
+    def PulishRCHashRecords(self, request_iterator, context):
+        pass
+    def GetRCHashCount(self,request, context):
+        pass
+    def GetRCHashRecords(self,request, context):
+        pass
+    def DownLoadRC(self,request, context):
+        pass
+    def UpLoadRC(self, request_iterator, context):
+        pass
+    def run(self):
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        ShowLibInterface_pb2_grpc.add_showlibifServicer_to_server(self, server)
+        server.add_insecure_port('[::]:50051')
+        server.start()
+        try:
+            while True:
+                time.sleep(_ONE_DAY_IN_SECONDS)
+        except KeyboardInterrupt:
+            server.stop(0)
+            self.stop()
 if __name__ == "__main__" :
     # 使用xx.py xxx路径
     old = datetime.datetime.now()
@@ -58,6 +97,9 @@ if __name__ == "__main__" :
     if argv[2] == "initailize":
         # 初始化
         f.initailize()
+    elif argv[2] == "start":
+        f.initailize()
+        f.start()
     else:
         print("不能存在方法 "+argv[2]+",您可以利用当前代码自行编写脚本" )
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
