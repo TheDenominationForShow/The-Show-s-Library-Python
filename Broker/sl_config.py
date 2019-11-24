@@ -50,6 +50,11 @@ class SL_Config():
             storage_node = root.getElementsByTagName('storage')[0]
             self.uuid = storage_node.attributes["uuid"].value
             self.role = storage_node.attributes["role"].value
+            if self.role == "broker":
+                broker = Broker_struct()
+                broker.ip = storage_node.getElementsByTagName('ip')[0].firstChild.data
+                broker.port = storage_node.getElementsByTagName('port')[0].firstChild.data
+                self.brokers.append(broker)
             brokers_node = root.getElementsByTagName('brokers')[0]
             broker_nodes = brokers_node.getElementsByTagName('broker')
             for item in broker_nodes:

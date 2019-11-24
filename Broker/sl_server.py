@@ -3,6 +3,7 @@
 @date: 2019-11-23 21:57
 @desc: 服务端模块
 '''
+from concurrent import futures
 import os
 import time
 import logging
@@ -12,9 +13,9 @@ from sl_config import SL_Config,Broker_struct
 import grpc
 from sl_rpc import SL_Command
 import ShowLibInterface_pb2
-import showlibifServicer from ShowLibInterface_pb2_grpc
+import ShowLibInterface_pb2_grpc
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
-class SL_Server(showlibifServicer):
+class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
     def __init__(self, rootdir, DBName=None):
         self.logger = logging.getLogger("Server")
         fileHandler = logging.FileHandler(
@@ -61,9 +62,9 @@ class SL_Server(showlibifServicer):
         if request.header.peerid != self.cfg.uuid:
             header.peerid = request.header.localid
             header.command = SL_Command.cmd_hello_deny
-            return ShowLibInterface_pb2.CommandMsg(header,hash="")
-        header.command = SL_Command.cmd_hello
-        return ShowLibInterface_pb2.CommandMsg(header,hash="")
+            return ShowLibInterface_pb2.CommandMsg(header = header,hash=[])
+        header.command = SL_Command.cmd_hello.value
+        return ShowLibInterface_pb2.CommandMsg(header,hash=[])
     def InsertRCHashRecords(self, request_iterator, context):
         pass
     def PulishRCHashCount(self,request, context):
@@ -81,7 +82,7 @@ class SL_Server(showlibifServicer):
     def run(self):
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         ShowLibInterface_pb2_grpc.add_showlibifServicer_to_server(self, server)
-        server.add_insecure_port('[::]:50051')
+        server.add_insecure_port(self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port)
         server.start()
         try:
             while True:

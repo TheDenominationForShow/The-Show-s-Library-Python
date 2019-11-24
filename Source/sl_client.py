@@ -10,7 +10,11 @@ import datetime
 from sys import argv
 from sl_storage import SL_Storage
 from sl_config import SL_Config,Broker_struct
+import grpc
 
+import ShowLibInterface_pb2
+import ShowLibInterface_pb2_grpc
+from sl_rpc import SL_Command
 class SL_Client:
     def __init__(self, rootdir, DBName=None):
         self.logger = logging.getLogger("Client")
@@ -59,12 +63,23 @@ class SL_Client:
     def start(self):
         self.logger.info('SL_Client start')
         #向服务器推送
-        
+        with grpc.insecure_channel(self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port) as channel:
+            stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
+            header = ShowLibInterface_pb2.MsgHeader()
+            header.senssionid = 0
+            header.localid = self.cfg.uuid
+            header.peerid = self.cfg.brokers[0].uuid
+            header.command = int(SL_Command.cmd_hello.value)
+            l = []
+            l.append("")
+            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = header,hash = l))
         #线程接收
 
         pass
     def stop(self):
         self.logger.info('SL_Client stop')
+    def run(self):
+        pass
 
 if __name__ == "__main__" :
     # 使用xx.py xxx路径
@@ -74,6 +89,9 @@ if __name__ == "__main__" :
     if argv[2] == "initailize":
         # 初始化
         f.initailize()
+    elif argv[2] == "start":
+        f.initailize()
+        f.start()
     else:
         print("不能存在方法 "+argv[2]+",您可以利用当前代码自行编写脚本" )
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))

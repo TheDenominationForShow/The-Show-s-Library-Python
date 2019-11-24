@@ -35,7 +35,7 @@ class SL_Storage:
             #DBName = os.path.basename(os.path.abspath(rootdir))
             #DBName += ".db"
             DBName = "Storage.db"
-            DBName = os.path.abspath(rootdir)+os.sep+".showlib" + DBName
+            DBName = os.path.abspath(rootdir)+os.sep+".showlib" +os.sep+ DBName
             self.DBName = DBName
             print("dname ="+DBName)
         self.conn = sqlite3.connect(DBName)
