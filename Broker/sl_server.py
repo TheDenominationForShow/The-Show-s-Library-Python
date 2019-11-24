@@ -101,7 +101,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
                     break
             self.lock.release()
             if res != None:
-                msg = "SL_Command.cmd_request" + " id=" +request.header.localid + " rescommand ="+res.header.command
+                msg = "SL_Command.cmd_request" + " id=" +request.header.localid + " rescommand ="+str(res.header.command)
                 self.logger.info(msg)
                 res.header.peerid = request.header.localid
                 res.header.localid =  self.cfg.uuid
