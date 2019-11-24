@@ -114,7 +114,7 @@ class SL_Client:
         print("SL_Client stop")
     def recv(self):
         msg = "recv start"
-        print(msg)
+        #print(msg)
         self.logger.info(msg)
         #向服务器询问是否有事件需要处理
         while self.run_flag:
@@ -141,14 +141,14 @@ class SL_Client:
                     while self.queue.empty() != True:
                         res = self.queue.get()
                         if res.header.command == SL_Command.cmd_publish_RCHashRecords.value:
-                            print("cmd_publish_RCHashRecords")
+                            #print("cmd_publish_RCHashRecords")
                             #处理本地发布
                             self.PulishRCHashRecords(stub,res)
                             pass
                         elif res.header.command == SL_Command.cmd_subcribe_Storage.value:
                             #处理本地订阅
                             self.GetRCHashRecords(stub,res)
-                            print("cmd_subcribe_Storage")
+                            #print("cmd_subcribe_Storage")
                             pass
                         else:
                             print("暂未实现")
