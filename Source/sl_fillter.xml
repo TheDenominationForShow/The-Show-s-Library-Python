@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<root ver="1.0.0">
+    <ctime>2019-11-25 17:30:39</ctime>
+    <mtime>2019-11-25 17:30:39</mtime>
+    <!--规则列表-->
+    <rules>
+        <!--规则，id为必填属性，且唯一 choose为必填属性 选择过滤还是添加-->
+        <!--待支持
+            <name regex = "n"></name>
+            <suffix></suffix>
+        -->
+        <!--已支持
+            <maxsize></maxsize>
+            <earliestctime></earliestctime>
+            <latestctime></latestctime>
+            <earliestmtime></earliestmtime>
+            <latestmtime></latestmtime>
+            <filesuffix><filesuffix>
+        -->
+        <rule id = "0">
+            <dirbasename>.showlib</dirbasename>
+        </rule>
+        <rule id="1" choose="include">
+            <minsize>0</minsize>
+        </rule>
+        <rule id="2" choose="exclude">
+        </rule>
+        
+    </rules>
+</root>

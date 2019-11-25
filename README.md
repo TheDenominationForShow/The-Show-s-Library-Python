@@ -10,8 +10,8 @@ setup.py 暂时还不需要去写，另外
 * 首先配置python环境
     * 安装python3 version >= 3.5
     * 安装 gRPC依赖:
-        * python -m pip install grpcio  一般只安装这个就行
-        * python -m pip install grpcio-tools
+        * python -m pip install grpcio  
+        * python -m pip install grpcio-tools 这个用来安装protobuf
 * 下载 `git clone 本项目.git`，并进入到Souce目录
 * 启动命令 `python  sl_client.py "库目录" "start"`  第一次扫描可能会慢，之后都是轻量增加文件都是飞速的
 * 输入 `stop` 等待退出

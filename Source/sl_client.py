@@ -74,6 +74,7 @@ class SL_Client:
         #向服务器推送
         connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
         print(connectStr)
+        
         with grpc.insecure_channel(connectStr) as channel:
             stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
             sendheader = ShowLibInterface_pb2.MsgHeader()
@@ -83,7 +84,7 @@ class SL_Client:
             sendheader.command = SL_Command.cmd_hello.value
             l = []
             print(sendheader)
-            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l))
+            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
             if response.header.command == SL_Command.cmd_hello_deny.value:
                 msg = "cmd_hello_deny error id = " +(self.cfg.brokers[0].uuid)
                 print(msg)
@@ -91,10 +92,10 @@ class SL_Client:
                 return Falsel.append()
             sendheader.command = SL_Command.cmd_subcribe_Storage.value
             print(sendheader)
-            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l))
+            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
             sendheader.command = SL_Command.cmd_publish_RCHashRecords.value
             print(sendheader)
-            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l))
+            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
         msg = "SL_Client thread start success"
         print(msg)
         self.logger.info(msg)
@@ -117,6 +118,7 @@ class SL_Client:
         #print(msg)
         self.logger.info(msg)
         #向服务器询问是否有事件需要处理
+        last_command = SL_Command.cmd_empty.value
         while self.run_flag:
             connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
             with grpc.insecure_channel(connectStr) as channel:
@@ -127,48 +129,67 @@ class SL_Client:
                 sendheader.peerid = self.cfg.brokers[0].uuid
                 sendheader.command = int(SL_Command.cmd_request.value)
                 response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = []))
+                if response.header.command != last_command:
+                    self.logger.info("recv command.value = "+str(response.header.command))
+                    last_command = response.header.command
+                    pass
                 if response.header.command != SL_Command.cmd_empty.value:
                     self.queue.put(response)
             time.sleep(10)
         self.logger.info("recv end")
     def process(self):
         self.logger.info("process start")
+        process_status = True #work
         while self.run_flag:
             connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
             with grpc.insecure_channel(connectStr) as channel:
                 stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
                 try:
                     while self.queue.empty() != True:
+                        process_status = False
                         res = self.queue.get()
                         if res.header.command == SL_Command.cmd_publish_RCHashRecords.value:
                             #print("cmd_publish_RCHashRecords")
+                            self.logger.info("process_status cmd_publish_RCHashRecords")
                             #处理本地发布
                             self.PulishRCHashRecords(stub,res)
                             pass
                         elif res.header.command == SL_Command.cmd_subcribe_Storage.value:
+                            self.logger.info("process_status cmd_subcribe_Storage")
                             #处理本地订阅
                             self.GetRCHashRecords(stub,res)
                             #print("cmd_subcribe_Storage")
                             pass
                         else:
                             print("暂未实现")
-                except expression as e:
-                    self.logger.error(e.msg)
+                except grpc._channel._Rendezvous as egrpc:
+                    self.logger.error(egrpc.details)
+                    self.logger.error(egrpc.debug_error_string)
+                except Exception as e:
+                    print(e)
+                    #self.logger.error(e.msg)
             if self.queue.empty() == True:
+                if process_status:
+                    self.logger.info("process_status sleep")
+                    process_status = False
                 time.sleep(10)
         self.logger.info("process end")
     def InsertRCHashRecords(self, stub, res):
         pass
     def PulishRCHashCount(self, stub, res):
         pass
+    def Get_local_SignatureRecord(self):
+        sg = SL_Signature(self.rootdir)
+        print("GetRecord "+str(threading.currentThread().ident))
+        ls = sg.GetRecord()
+        return ls
     def GetRecord(self,res):
         sendheader = ShowLibInterface_pb2.MsgHeader()
         sendheader.senssionid = res.header.senssionid
         sendheader.localid = self.cfg.uuid
         sendheader.peerid = res.header.localid
         sendheader.command = res.header.command
-        sg = SL_Signature(self.rootdir)
-        ls = sg.GetRecord()
+        ls = self.Get_local_SignatureRecord()
         for i in range(0,len(ls)):
             retl = []
             size = str(ls[i][2])
@@ -183,9 +204,9 @@ class SL_Client:
     def GetRCHashCount(self, stub, res):
         pass
     def GetRCHashRecords(self, stub, res):
+        records = []
         respoense = stub.GetRCHashRecords(res)
         for item in respoense:
-            sg = SL_Signature(self.rootdir,item.header.localid)
             '''
             records = []
             for rec in item.record:
@@ -201,8 +222,12 @@ class SL_Client:
                 record.append(rec.name)
                 record.append(rec.hash)
                 record.append(rec.size)
-                sg.InsertToDB(record)
-
+                records.append(record)
+        sg = SL_Signature(self.rootdir,item.header.localid)
+        print("GetRCHashRecords "+str(threading.currentThread().ident))
+        for it in records:
+            sg.InsertToDB(it)
+        print("GetRCHashRecords end "+str(threading.currentThread().ident))
     def DownLoadRC(self, stub, res):
         pass
     def UpLoadRC(self, stub, res):
