@@ -58,6 +58,14 @@ setup.py 暂时还不需要去写，另外
 
 sudo nohup python -u sl_server.py "." "start" > nohup.out 2>&1 &
 
+> 今天扫描照片库，大约4g的大小，2400个文件。耗时11分钟，平均每秒6m
+
+* ShowLib scan storage end    2019-11-25 23:42:27.906408  耗时0:11:58.923699
+    (2438,)
+* 23：53 对比使用git测试
+    * 23：59 git add * 结束
+    * 23：59 git commit -am "init" 的瞬间结束，现在0：00
+    * git使用中，任务管理器读取显示几kb，写入12m/s，这个太奇葩了吧
 ## 测试
 
 在客户端生成的config.xml `brokers`中添加下测试borker `23.105.207.122` 重启即可进行签名的上传和下载
