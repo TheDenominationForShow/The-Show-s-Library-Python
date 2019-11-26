@@ -131,14 +131,22 @@ class SL_Storage:
         hash_list = self.signature.GetHashList()
         for item in recordset:
             # name hash size
-            bexsit= False
+            bexsit = False
             for hash in hash_list:
                 if item[1] == hash:
                     bexsit = True
                     self.logger.info("hash exsit name=%s hash =%s" %(item[0],item[1]))
                     break
-            if bexsit != True:
-                records.append(tuple(item[0:3]))
+            if  bexsit == True:
+                continue
+            for record in records:
+                if item[1] == record[1]:
+                    bexsit = True
+                    self.logger.info("hash exsit name=%s hash =%s" %(item[0],item[1]))
+                    break
+            if  bexsit == True:
+                continue
+            records.append(tuple(item[0:3]))
         self.signature.InsertDB_Records(records)
     def InsertDB_Records(self, recordset):
         if len(recordset) == 0:

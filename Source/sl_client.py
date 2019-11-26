@@ -62,6 +62,8 @@ class SL_Client:
         print(msg)
         self.logger.info(msg)
         msg = "仓库资源 count =" + str(len(records))
+        print(msg)
+        self.logger.info(msg)
         #存storageDB
         old = datetime.datetime.now()
         self.storage.InsertDB_Records(records)
@@ -76,7 +78,7 @@ class SL_Client:
         msg = "insert to signatureDB " + now.strftime('%Y-%m-%d %H:%M:%S.%f')+ "  耗时"+ str(now-old)
         print(msg)
         self.logger.info(msg)
-        
+
         msg = "SL_Client initailize success"
         print(msg)
         self.logger.info(msg)
