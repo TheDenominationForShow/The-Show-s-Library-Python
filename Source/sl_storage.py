@@ -130,7 +130,7 @@ class SL_Storage:
         record.append(str(os.stat(FileAbsPath).st_ino))
         record.append(FileAbsPath)
         record.append(TimeStampToTime(os.path.getmtime(FileAbsPath)))
-        self.InsertToDB(record)
+        #self.InsertToDB(record)
     def ListvedioRC(self):
         #查找视频资源
         l = []

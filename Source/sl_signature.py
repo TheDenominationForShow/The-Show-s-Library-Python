@@ -4,6 +4,7 @@ import os
 import time
 import logging
 import datetime
+import mmap
 from sys import argv
 
 '''
@@ -55,7 +56,7 @@ class SL_Signature:
 
     def GetFileHash(self, FileName):
         #获取FileName的hash值
-        hs = hashlib.sha256()
+        hs = hashlib.sha1()
         with open(FileName,'rb') as f:
             while True:
                 block = f.read(4096)  
@@ -63,6 +64,19 @@ class SL_Signature:
                     hs.update(block)
                 else:
                     break
+        return hs.hexdigest()
+    def GetFileHash_bymmap(self, FileName):
+        #获取FileName的hash值
+        hs = hashlib.sha1()
+        with open(FileName,'rb') as f:
+            mm = mmap.mmap(f.fileno(), 0,access=mmap.ACCESS_READ)
+            while True:
+                block = mm.read(4096)  
+                if block:
+                    hs.update(block)
+                else:
+                    break
+            mm.close()
         return hs.hexdigest()
     def InsertToDB(self,record):
         #将记录插入到数据库
@@ -82,10 +96,10 @@ class SL_Signature:
         record = []
         record.append(name)
         FileAbsPath = root+os.sep+name
-        h = self.GetFileHash(FileAbsPath)
+        h = self.GetFileHash_bymmap(FileAbsPath)
         record.append(h)
         record.append(os.path.getsize(FileAbsPath))
-        self.InsertToDB(record)
+        #self.InsertToDB(record)
         return record
     def GetRecord(self):
         self.cur.execute(''' SELECT * FROM SignatureLib''')

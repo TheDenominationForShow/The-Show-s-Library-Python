@@ -61,9 +61,9 @@ class SL_Config():
                 broker.port = item.getElementsByTagName('port')[0].firstChild.data
                 self.brokers.append(broker)
             return True
+            
     def Create_config(self,role = "client"):
         doc = XmlDom.Document()
-
         root_node = doc.createElement('root')
         doc.appendChild(root_node)
         root_node.attributes["ver"] = current_config_version

@@ -80,29 +80,43 @@ class SL_Client:
             return False
         connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
         print(connectStr)
-        
-        with grpc.insecure_channel(connectStr) as channel:
-            stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
-            sendheader = ShowLibInterface_pb2.MsgHeader()
-            sendheader.senssionid = 2
-            sendheader.localid = self.cfg.uuid
-            sendheader.peerid = self.cfg.brokers[0].uuid
-            sendheader.command = SL_Command.cmd_hello.value
-            l = []
-            print(sendheader)
-            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
-            if response.header.command == SL_Command.cmd_hello_deny.value:
-                msg = "cmd_hello_deny error id = " +(self.cfg.brokers[0].uuid)
-                print(msg)
-                self.logger.error(msg)
-                return Falsel.append()
-            sendheader.command = SL_Command.cmd_subcribe_Storage.value
-            print(sendheader)
-            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
-            sendheader.command = SL_Command.cmd_publish_RCHashRecords.value
-            print(sendheader)
-            response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
-        msg = "SL_Client thread start success"
+        try:
+            with grpc.insecure_channel(connectStr) as channel:
+                stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
+                sendheader = ShowLibInterface_pb2.MsgHeader()
+                sendheader.senssionid = 2
+                sendheader.localid = self.cfg.uuid
+                sendheader.peerid = self.cfg.brokers[0].uuid
+                sendheader.command = SL_Command.cmd_hello.value
+                l = []
+                print(sendheader)
+                response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
+                if response.header.command == SL_Command.cmd_hello_deny.value:
+                    msg = "cmd_hello_deny error id = " +(self.cfg.brokers[0].uuid)
+                    print(msg)
+                    self.logger.error(msg)
+                    return Falsel.append()
+                sendheader.command = SL_Command.cmd_subcribe_Storage.value
+                print(sendheader)
+                response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
+                sendheader.command = SL_Command.cmd_publish_RCHashRecords.value
+                print(sendheader)
+                response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
+        except grpc._channel._Rendezvous as egrpc:
+            self.logger.error(egrpc.details)
+            self.logger.error(egrpc.debug_error_string)
+            msg = "SL_Client start Failed"
+            print(msg)
+            self.logger.info(msg)
+            return False
+        except Exception as e:
+            print(e)
+            self.logger.info(e)
+            msg = "SL_Client start Failed"
+            print(msg)
+            self.logger.info(msg)
+            return False
+        msg = "SL_Client thread start "
         print(msg)
         self.logger.info(msg)
         #线程接收
@@ -250,10 +264,13 @@ if __name__ == "__main__" :
         f.initailize()
         f.start()
         run_flag = True
-        #while run_flag:
-        stop = input("输入 stop 停止:")
-        if stop == "stop":
-            f.stop()
+        while run_flag:
+            stop = input("输入 stop 停止:")
+            if stop == "stop":
+                f.stop()
+                run_flag = False
+            else:
+                print("未知命令")
     else:
         print("不能存在方法 "+argv[2]+",您可以利用当前代码自行编写脚本" )
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))

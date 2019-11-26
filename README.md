@@ -62,10 +62,21 @@ sudo nohup python -u sl_server.py "." "start" > nohup.out 2>&1 &
 
 * ShowLib scan storage end    2019-11-25 23:42:27.906408  耗时0:11:58.923699
     (2438,)
-* 23：53 对比使用git测试
+* 11-25 23：53 对比使用git测试
     * 23：59 git add * 结束
     * 23：59 git commit -am "init" 的瞬间结束，现在0：00
     * git使用中，任务管理器读取显示几kb，写入12m/s，这个太奇葩了吧
+* 11-26 10:58 笔记本电脑 5200转 3代i5 8g内存
+    * 原始版本 扫描杂项文件 大小7.3g,数目2000，耗时10min  ShowLib scan storage end    2019-11-26 10:57:23.088592  耗时0:10:37.492650 (2002,)
+    * mmap版本 耗时13min，什么鬼？    ShowLib scan storage end    2019-11-26 11:26:21.387161  耗时0:13:39.674971 (2002,)
+    * mmap版本                      ShowLib scan storage end    2019-11-26 11:47:40.668895  耗时0:15:57.902134 (2002,)
+    * 原始版本                      ShowLib scan storage end     2019-11-26 12:08:18.360124  耗时0:17:50.305137 (2002,)
+    * git 启动时间13:28 停止时间 13:36 耗时8分钟
+    * sha1版本                          ShowLib scan storage end    2019-11-26 13:51:09.816232  耗时0:10:45.188610(2002,)
+    * no sqlite                         ShowLib scan storage end    2019-11-26 13:56:05.029213  耗时0:01:56.525342 (0,)
+    * no sqlite                         ShowLib scan storage end    2019-11-26 14:04:03.453133  耗时0:01:57.722534 (0,
+    * no sqlite && sha1 ShowLib         ShowLib scan storage end    2019-11-26 14:06:56.842025  耗时0:01:57.891734(0,)
+    * no sqlite && sha1 && mmap         ShowLib scan storage end    2019-11-26 14:13:42.983007  耗时0:02:12.974503 (0,)
 ## 测试
 
 在客户端生成的config.xml `brokers`中添加下测试borker `23.105.207.122` 重启即可进行签名的上传和下载
