@@ -83,6 +83,7 @@ class SL_Storage:
         if root_path is not None:
             RootPath = os.path.abspath(self.root_path)
         self.logger.debug(RootPath)
+        records = []
         recordset = self.GetRecords()
         for root, dirs, files in os.walk(RootPath) :
             print(root)
@@ -95,8 +96,9 @@ class SL_Storage:
                     if self.IsResourceChange(root,name,recordset) != True:
                         continue
                 print(name)
-                self.GenRecord(root,name)
-        return  recordset   
+                record = self.GenRecord(root,name)
+                records.append(record)
+        return  records   
     def IsResourceChange(self,dir,name,records):
         rc_stat = os.stat(dir+os.sep+name)
         record = None
@@ -122,6 +124,29 @@ class SL_Storage:
             self.conn.close()
             self.conn = sqlite3.connect(self.DBName)
             self.cur = self.conn.cursor()
+    def InsertDB_Signature_Records(self, recordset):
+        if len(recordset) == 0:
+            return
+        records = []
+        for item in recordset:
+            records.append(tuple(item[0:3]))
+        self.signature.InsertDB_Records(records)
+    def InsertDB_Records(self, recordset):
+        if len(recordset) == 0:
+            return
+        records = []
+        for item in recordset:
+            records.append(tuple(item))
+        try:
+            self.conn.executemany('''insert into StorageLib (name, hash, size, idev, inode, path, mtime) 
+                values(?,?,?,?,?,?,?)''',records)
+            self.conn.commit()
+        except Exception as e:
+            self.logger.warning("%s len is %s" %(e,str(len(records))))
+            self.cur.close()
+            self.conn.close()
+            self.conn = sqlite3.connect(self.DBName)
+            self.cur = self.conn.cursor()
     def GenRecord(self,root,name):
         #生成单条记录并插入到库
         FileAbsPath = root+'\\'+name
@@ -130,6 +155,7 @@ class SL_Storage:
         record.append(str(os.stat(FileAbsPath).st_ino))
         record.append(FileAbsPath)
         record.append(TimeStampToTime(os.path.getmtime(FileAbsPath)))
+        return record
         #self.InsertToDB(record)
     def ListvedioRC(self):
         #查找视频资源

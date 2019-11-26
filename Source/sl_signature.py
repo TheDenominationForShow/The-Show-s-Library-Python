@@ -56,7 +56,7 @@ class SL_Signature:
 
     def GetFileHash(self, FileName):
         #获取FileName的hash值
-        hs = hashlib.sha1()
+        hs = hashlib.sha256()
         with open(FileName,'rb') as f:
             while True:
                 block = f.read(4096)  
@@ -67,7 +67,7 @@ class SL_Signature:
         return hs.hexdigest()
     def GetFileHash_bymmap(self, FileName):
         #获取FileName的hash值
-        hs = hashlib.sha1()
+        hs = hashlib.sha256()
         with open(FileName,'rb') as f:
             mm = mmap.mmap(f.fileno(), 0,access=mmap.ACCESS_READ)
             while True:
@@ -80,7 +80,7 @@ class SL_Signature:
         return hs.hexdigest()
     def InsertToDB(self,record):
         #将记录插入到数据库
-        try:
+        try: 
             self.conn.execute('''insert into SignatureLib (name, hash, size) 
                 values(?,?,?)''',tuple(record))
             self.conn.commit()
@@ -90,18 +90,27 @@ class SL_Signature:
             self.conn.close()
             self.conn = sqlite3.connect(self.DBName)
             self.cur = self.conn.cursor()
-
+    def InsertDB_Records(self, records):
+        try:
+            self.cur.executemany('''insert into SignatureLib (name, hash, size) stopvalues(?,?,?)''',records)
+            self.conn.commit()
+        except Exception as e:
+            self.logger.warning("%s len is %s" %(e,str(len(records))))
+            self.cur.close()
+            self.conn.close()
+            self.conn = sqlite3.connect(self.DBName)
+            self.cur = self.conn.cursor()
     def GenRecord(self,root,name):
         #生成单条记录并插入到库
         record = []
         record.append(name)
         FileAbsPath = root+os.sep+name
-        h = self.GetFileHash_bymmap(FileAbsPath)
+        h = self.GetFileHash(FileAbsPath)
         record.append(h)
         record.append(os.path.getsize(FileAbsPath))
         #self.InsertToDB(record)
         return record
-    def GetRecord(self):
+    def GetRecords(self):
         self.cur.execute(''' SELECT * FROM SignatureLib''')
         ls = self.cur.fetchall()
         self.conn.commit()

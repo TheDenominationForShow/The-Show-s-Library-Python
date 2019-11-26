@@ -56,14 +56,27 @@ class SL_Client:
         msg = "ShowLib scan storage start   " + old.strftime('%Y-%m-%d %H:%M:%S.%f')
         print(msg)
         self.logger.info(msg)
-        self.storage.scan_path()
+        records = self.storage.scan_path()
         now = datetime.datetime.now()
         msg = "ShowLib scan storage end    " + now.strftime('%Y-%m-%d %H:%M:%S.%f')+ "  耗时"+ str(now-old)
         print(msg)
         self.logger.info(msg)
-        msg = "仓库资源 count =" + str(self.storage.ShowRecordsCount())
+        msg = "仓库资源 count =" + str(len(records))
+        #存storageDB
+        old = datetime.datetime.now()
+        self.storage.InsertDB_Records(records)
+        now = datetime.datetime.now()
+        msg = "insert to storageDB " + now.strftime('%Y-%m-%d %H:%M:%S.%f')+ "  耗时"+ str(now-old)
         print(msg)
         self.logger.info(msg)
+        #存signatureDB
+        old = datetime.datetime.now()
+        self.storage.InsertDB_Signature_Records(records)
+        now = datetime.datetime.now()
+        msg = "insert to signatureDB " + now.strftime('%Y-%m-%d %H:%M:%S.%f')+ "  耗时"+ str(now-old)
+        print(msg)
+        self.logger.info(msg)
+        
         msg = "SL_Client initailize success"
         print(msg)
         self.logger.info(msg)
@@ -201,7 +214,7 @@ class SL_Client:
     def Get_local_SignatureRecord(self):
         sg = SL_Signature(self.rootdir)
         print("GetRecord "+str(threading.currentThread().ident))
-        ls = sg.GetRecord()
+        ls = sg.GetRecords()
         return ls
     def GetRecord(self,res):
         sendheader = ShowLibInterface_pb2.MsgHeader()
