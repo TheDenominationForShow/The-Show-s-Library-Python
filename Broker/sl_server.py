@@ -50,7 +50,9 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
             self.logger.error('SL_Server initailize load config failed！')
             return False
         #扫描
-        print("SL_Server initailize success")
+        msg = "SL_Server initailize success"
+        print(msg)
+        self.logger.info(msg)
         return True
 
     def start(self):

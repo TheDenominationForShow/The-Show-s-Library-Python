@@ -72,6 +72,12 @@ class SL_Client:
     def start(self):
         self.logger.info('SL_Client start')
         #向服务器推送
+        if len(self.cfg.brokers) == 0:
+            print("没有可用的broker连接，请到配置文件中添加")
+            msg = "SL_Client thread start failed！"
+            print(msg)
+            self.logger.info(msg)
+            return False
         connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
         print(connectStr)
         
