@@ -215,6 +215,6 @@ if __name__ == "__main__" :
         f.initailize()
         f.start()
     else:
-        print("不能存在方法 "+argv[2]+",您可以利用当前代码自行编写脚本" )
+        print("不存在方法 "+argv[2]+",您可以利用当前代码自行编写脚本" )
     print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
     print(datetime.datetime.now()-old)
