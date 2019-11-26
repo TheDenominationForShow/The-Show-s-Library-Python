@@ -79,6 +79,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
             header.localid = self.cfg.uuid
             return ShowLibInterface_pb2.CommandMsg(header = header,hash=[])
         elif request.header.command == SL_Command.cmd_request.value:
+            #来自客户端的请求会话
             print("SL_Command.cmd_request")
             header = ShowLibInterface_pb2.MsgHeader(localid="",peerid="",command = 0)
             header.senssionid = request.header.senssionid
@@ -91,14 +92,6 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
             for i in range(0,len(self.l)):
                 if self.l[i].header.localid == request.header.localid:
                     res = self.l.pop(i)
-                    '''
-                    res = ShowLibInterface_pb2.CommandMsg()
-                    res.header.peerid = request.header.localid
-                    res.header.localid =  self.cfg.uuid
-                    res.header.command = self.l[i].header.command
-                    res.hash = self.l[i].hash
-                    del self.l[i]
-                    '''
                     print(res)
                     break
             self.lock.release()
@@ -145,17 +138,6 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         sendheader = ShowLibInterface_pb2.MsgHeader()
         for item in request_iterator:
             sg = SL_Signature(self.rootdir,item.header.localid)
-            '''
-            records = []
-            for rec in item.record:
-                
-                record = []
-                record.append(rec.name)
-                record.append(rec.hash)
-                record.append(rec.size)
-                records.append(record)
-            sg.InsertToDB(records)
-            '''
             for rec in item.record:
                 record = []
                 record.append(rec.name)
@@ -166,6 +148,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
             sendheader.localid = self.cfg.uuid
             sendheader.peerid = item.header.localid
             sendheader.command = SL_Command.cmd_empty.value
+        
         return ShowLibInterface_pb2.CommandMsg(header = sendheader,hash=[])
     def GetRCHashCount(self,request, context):
         pass
@@ -193,6 +176,12 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
     def UpLoadRC(self, request_iterator, context):
         pass
     def run(self):
+        if len(self.cfg.brokers) == 0:
+            print("broker配置错误，请到配置文件中添加")
+            msg = "SL_Client thread start failed！"
+            print(msg)
+            self.logger.info(msg)
+            return False
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         ShowLibInterface_pb2_grpc.add_showlibifServicer_to_server(self, server)
         connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
