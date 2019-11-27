@@ -148,7 +148,10 @@ class SL_Client:
         self.logger.info(msg)
         return True
     def stop(self):
+        print("-------SL_Client stopping-----")
         self.run_flag = False
+        self.thread_process.join()
+        self.threadrecv.join()
         self.logger.info('SL_Client stop')
         print("SL_Client stop")
     def recv(self):
@@ -173,7 +176,7 @@ class SL_Client:
                     pass
                 if response.header.command != SL_Command.cmd_empty.value:
                     self.queue.put(response)
-            time.sleep(10)
+            time.sleep(0)
         self.logger.info("recv end")
     def process(self):
         self.logger.info("process start")
