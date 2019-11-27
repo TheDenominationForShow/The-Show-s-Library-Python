@@ -50,6 +50,11 @@ class SL_Config():
             storage_node = root.getElementsByTagName('storage')[0]
             self.uuid = storage_node.attributes["uuid"].value
             self.role = storage_node.attributes["role"].value
+            if self.role == "broker":
+                broker = Broker_struct()
+                broker.ip = storage_node.getElementsByTagName('ip')[0].firstChild.data
+                broker.port = storage_node.getElementsByTagName('port')[0].firstChild.data
+                self.brokers.append(broker)
             brokers_node = root.getElementsByTagName('brokers')[0]
             broker_nodes = brokers_node.getElementsByTagName('broker')
             for item in broker_nodes:
@@ -61,7 +66,6 @@ class SL_Config():
                 broker.port = item.getElementsByTagName('port')[0].firstChild.data
                 self.brokers.append(broker)
             return True
-            
     def Create_config(self,role = "client"):
         doc = XmlDom.Document()
         root_node = doc.createElement('root')
@@ -85,7 +89,15 @@ class SL_Config():
 
         storage_node.attributes["uuid"] = str(uuid.uuid1())
         storage_node.attributes["role"] = role
-        
+        if role == "broker":
+            ip = doc.createElement('ip')
+            port = doc.createElement('port')
+            storage_node.appendChild(ip)
+            storage_node.appendChild(port)
+            ip_text_node = doc.createTextNode("23.105.207.122")
+            ip.appendChild(ip_text_node)
+            port_text_node = doc.createTextNode("50051")
+            port.appendChild(port_text_node)
         with open(self.path,'w',encoding="utf-8") as f:
             f.write(doc.toxml())
 

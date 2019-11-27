@@ -136,19 +136,22 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         pass
     def PulishRCHashRecords(self, request_iterator, context):
         sendheader = ShowLibInterface_pb2.MsgHeader()
+        recordset = []
         for item in request_iterator:
-            sg = SL_Signature(self.rootdir,item.header.localid)
+            #sg = SL_Signature(self.rootdir,item.header.localid)
             for rec in item.record:
                 record = []
                 record.append(rec.name)
                 record.append(rec.hash)
                 record.append(rec.size)
-                sg.InsertToDB(record)
+                #sg.InsertToDB(record)
+                recordset.append(record)
             sendheader.senssionid = item.header.senssionid
             sendheader.localid = self.cfg.uuid
             sendheader.peerid = item.header.localid
             sendheader.command = SL_Command.cmd_empty.value
-        
+        self.InsertDB_Signature_Records(recordset,item.header.localid)
+        self.InsertDB_Signature_Records(recordset)
         return ShowLibInterface_pb2.CommandMsg(header = sendheader,hash=[])
     def GetRCHashCount(self,request, context):
         pass
@@ -194,6 +197,31 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         except KeyboardInterrupt:
             server.stop(0)
             self.stop()
+    def InsertDB_Signature_Records(self, recordset,dbname = None):
+        if len(recordset) == 0:
+            return
+        records = []
+        sg = SL_Signature(self.rootdir,dbname)
+        hash_list = sg.GetHashList()
+        for item in recordset:
+            # name hash size
+            bexsit = False
+            for hash in hash_list:
+                if item[1] == hash:
+                    bexsit = True
+                    self.logger.info("hash exsit name=%s hash =%s" %(item[0],item[1]))
+                    break
+            if  bexsit == True:
+                continue
+            for record in records:
+                if item[1] == record[1]:
+                    bexsit = True
+                    self.logger.info("hash exsit name=%s hash =%s" %(item[0],item[1]))
+                    break
+            if  bexsit == True:
+                continue
+            records.append(tuple(item[0:3]))
+        sg.InsertDB_Records(records)
 if __name__ == "__main__" :
     # 使用xx.py xxx路径
     old = datetime.datetime.now()
