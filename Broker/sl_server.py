@@ -220,7 +220,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
                     break
             if  bexsit == True:
                 continue
-            records.append(tuple(item[0:3]))
+            records.append(tuple(item))
         sg.InsertDB_Records(records)
 if __name__ == "__main__" :
     # 使用xx.py xxx路径

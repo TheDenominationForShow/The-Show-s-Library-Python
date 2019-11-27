@@ -36,9 +36,9 @@ message CommandMsg{
 
 //
 message RCHashRecord {
+  string name = 1;
   string hash = 2;
-  string name = 3;
-  string size = 4;
+  string size = 3;
 }
 message RCHashRecords {
   MsgHeader header = 1;
