@@ -61,7 +61,10 @@ class SL_Client:
         msg = "ShowLib scan storage end    " + now.strftime('%Y-%m-%d %H:%M:%S.%f')+ "  耗时"+ str(now-old)
         print(msg)
         self.logger.info(msg)
-        msg = "仓库资源 count =" + str(len(records))
+        msg = "新扫描仓库资源 count =" + str(len(records))
+        print(msg)
+        self.logger.info(msg)
+        msg = "仓库资源 count =" + str(self.storage.ShowRecordsCount())
         print(msg)
         self.logger.info(msg)
         #存storageDB
@@ -227,8 +230,8 @@ class SL_Client:
         ls = self.Get_local_SignatureRecord()
         for i in range(0,len(ls)):
             retl = []
+            #因为是sqlite，基本入库自动转换
             size = str(ls[i][2])
-            print(size)
             retl.append(ShowLibInterface_pb2.RCHashRecord(name = ls[i][0],hash = ls[i][1],size = size ))
             yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
 

@@ -145,7 +145,6 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
                 record.append(rec.hash)
                 record.append(rec.size)
                 #sg.InsertToDB(record)
-                print(record)
                 recordset.append(record)
             sendheader.senssionid = item.header.senssionid
             sendheader.localid = self.cfg.uuid
@@ -205,7 +204,6 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         sg = SL_Signature(self.rootdir,dbname)
         hash_list = sg.GetHashList()
         for item in recordset:
-            print(item)
             # name hash size
             bexsit = False
             for hash in hash_list:
