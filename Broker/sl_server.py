@@ -145,6 +145,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
                 record.append(rec.hash)
                 record.append(rec.size)
                 #sg.InsertToDB(record)
+                print(record)
                 recordset.append(record)
             sendheader.senssionid = item.header.senssionid
             sendheader.localid = self.cfg.uuid

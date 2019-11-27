@@ -228,6 +228,7 @@ class SL_Client:
         for i in range(0,len(ls)):
             retl = []
             size = str(ls[i][2])
+            print(size)
             retl.append(ShowLibInterface_pb2.RCHashRecord(name = ls[i][0],hash = ls[i][1],size = size ))
             yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
 
