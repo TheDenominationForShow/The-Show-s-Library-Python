@@ -79,6 +79,10 @@ python -m grpc_tools.protoc -I.  --python_out=.  --grpc_python_out=.  ShowLibInt
     * no sqlite                         ShowLib scan storage end    2019-11-26 14:04:03.453133  耗时0:01:57.722534 (0,
     * no sqlite && sha1 ShowLib         ShowLib scan storage end    2019-11-26 14:06:56.842025  耗时0:01:57.891734(0,)
     * no sqlite && sha1 && mmap         ShowLib scan storage end    2019-11-26 14:13:42.983007  耗时0:02:12.974503 (0,)
+* 11-27 23:51 台式8i7 移动硬盘 16g内存
+    * 优化版本        生活大爆炸 10.3g 80个视频文件 ShowLib scan storage end    2019-11-27 23:47:45.113670  耗时0:01:40.441695 新扫描仓库资源 count =86
+    * 优化版本        4g杂项图片 2000个      ShowLib scan storage end    2019-11-27 23:59:59.056955  耗时0:00:41.412974 新扫描仓库资源 count =2438
+    
 ## 测试
 
 在客户端生成的config.xml `brokers`中添加下测试borker `23.105.207.122` 重启即可进行签名的上传和下载

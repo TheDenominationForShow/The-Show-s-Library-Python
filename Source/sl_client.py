@@ -64,7 +64,7 @@ class SL_Client:
         msg = "新扫描仓库资源 count =" + str(len(records))
         print(msg)
         self.logger.info(msg)
-        msg = "仓库资源 count =" + str(self.storage.ShowRecordsCount())
+        msg = "旧仓库资源 count =" + str(self.storage.ShowRecordsCount())
         print(msg)
         self.logger.info(msg)
         #存storageDB
@@ -150,8 +150,9 @@ class SL_Client:
     def stop(self):
         print("-------SL_Client stopping-----")
         self.run_flag = False
-        self.thread_process.join()
-        self.threadrecv.join()
+        if self.thread_process is not None:
+            self.thread_process.join()
+            self.threadrecv.join()
         self.logger.info('SL_Client stop')
         print("SL_Client stop")
     def recv(self):
@@ -176,7 +177,7 @@ class SL_Client:
                     pass
                 if response.header.command != SL_Command.cmd_empty.value:
                     self.queue.put(response)
-            time.sleep(0)
+            time.sleep(10)
         self.logger.info("recv end")
     def process(self):
         self.logger.info("process start")
@@ -187,7 +188,7 @@ class SL_Client:
                 stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
                 try:
                     while self.queue.empty() != True:
-                        process_status = False
+                        process_status = True
                         res = self.queue.get()
                         if res.header.command == SL_Command.cmd_publish_RCHashRecords.value:
                             #print("cmd_publish_RCHashRecords")
