@@ -168,8 +168,8 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         for i in range(0,len(ls)):
             retl = []
             size = str(ls[i][2])
-            ShowLibInterface_pb2.RCHashRecord(hash = ls[i][1], name = ls[i][0],size = size )
-            retl.append()
+            re = ShowLibInterface_pb2.RCHashRecord(hash = ls[i][1], name = ls[i][0],size = size )
+            retl.append(re)
             yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
     def GetRCHashRecords(self,request, context):
         iter = self.GenRecord(request)
