@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='ShowLibInterface',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x16ShowLibInterface.proto\x12\x10ShowLibInterface\"Q\n\tMsgHeader\x12\x0f\n\x07localid\x18\x01 \x01(\t\x12\x0e\n\x06peerid\x18\x02 \x01(\t\x12\x12\n\nsenssionid\x18\x03 \x01(\x05\x12\x0f\n\x07\x63ommand\x18\x04 \x01(\x05\"G\n\nCommandMsg\x12+\n\x06header\x18\x01 \x01(\x0b\x32\x1b.ShowLibInterface.MsgHeader\x12\x0c\n\x04hash\x18\x02 \x03(\t\"8\n\x0cRCHashRecord\x12\x0c\n\x04hash\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0c\n\x04size\x18\x04 \x01(\t\"l\n\rRCHashRecords\x12+\n\x06header\x18\x01 \x01(\x0b\x32\x1b.ShowLibInterface.MsgHeader\x12.\n\x06record\x18\x02 \x03(\x0b\x32\x1e.ShowLibInterface.RCHashRecord\"I\n\x0bRecordCount\x12+\n\x06header\x18\x01 \x01(\x0b\x32\x1b.ShowLibInterface.MsgHeader\x12\r\n\x05\x43ount\x18\x02 \x01(\x05\"(\n\x06RCByte\x12\x0f\n\x07\x62lockid\x18\x01 \x01(\t\x12\r\n\x05\x62lock\x18\x02 \x01(\x0c\x32\x97\x05\n\tshowlibif\x12G\n\x07\x63ommand\x12\x1c.ShowLibInterface.CommandMsg\x1a\x1c.ShowLibInterface.CommandMsg\"\x00\x12Y\n\x13InsertRCHashRecords\x12\x1e.ShowLibInterface.RCHashRecord\x1a\x1c.ShowLibInterface.CommandMsg\"\x00(\x01\x30\x01\x12R\n\x11PulishRCHashCount\x12\x1d.ShowLibInterface.RecordCount\x1a\x1c.ShowLibInterface.CommandMsg\"\x00\x12X\n\x13PulishRCHashRecords\x12\x1f.ShowLibInterface.RCHashRecords\x1a\x1c.ShowLibInterface.CommandMsg\"\x00(\x01\x12O\n\x0eGetRCHashCount\x12\x1c.ShowLibInterface.CommandMsg\x1a\x1d.ShowLibInterface.RecordCount\"\x00\x12U\n\x10GetRCHashRecords\x12\x1c.ShowLibInterface.CommandMsg\x1a\x1f.ShowLibInterface.RCHashRecords\"\x00\x30\x01\x12H\n\nDownLoadRC\x12\x1c.ShowLibInterface.CommandMsg\x1a\x18.ShowLibInterface.RCByte\"\x00\x30\x01\x12\x46\n\x08UpLoadRC\x12\x18.ShowLibInterface.RCByte\x1a\x1c.ShowLibInterface.CommandMsg\"\x00(\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x16ShowLibInterface.proto\x12\x10ShowLibInterface\"Q\n\tMsgHeader\x12\x0f\n\x07localid\x18\x01 \x01(\t\x12\x0e\n\x06peerid\x18\x02 \x01(\t\x12\x12\n\nsenssionid\x18\x03 \x01(\x05\x12\x0f\n\x07\x63ommand\x18\x04 \x01(\x05\"G\n\nCommandMsg\x12+\n\x06header\x18\x01 \x01(\x0b\x32\x1b.ShowLibInterface.MsgHeader\x12\x0c\n\x04hash\x18\x02 \x03(\t\"8\n\x0cRCHashRecord\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04hash\x18\x02 \x01(\t\x12\x0c\n\x04size\x18\x03 \x01(\t\"l\n\rRCHashRecords\x12+\n\x06header\x18\x01 \x01(\x0b\x32\x1b.ShowLibInterface.MsgHeader\x12.\n\x06record\x18\x02 \x03(\x0b\x32\x1e.ShowLibInterface.RCHashRecord\"I\n\x0bRecordCount\x12+\n\x06header\x18\x01 \x01(\x0b\x32\x1b.ShowLibInterface.MsgHeader\x12\r\n\x05\x43ount\x18\x02 \x01(\x05\"(\n\x06RCByte\x12\x0f\n\x07\x62lockid\x18\x01 \x01(\t\x12\r\n\x05\x62lock\x18\x02 \x01(\x0c\x32\x97\x05\n\tshowlibif\x12G\n\x07\x63ommand\x12\x1c.ShowLibInterface.CommandMsg\x1a\x1c.ShowLibInterface.CommandMsg\"\x00\x12Y\n\x13InsertRCHashRecords\x12\x1e.ShowLibInterface.RCHashRecord\x1a\x1c.ShowLibInterface.CommandMsg\"\x00(\x01\x30\x01\x12R\n\x11PulishRCHashCount\x12\x1d.ShowLibInterface.RecordCount\x1a\x1c.ShowLibInterface.CommandMsg\"\x00\x12X\n\x13PulishRCHashRecords\x12\x1f.ShowLibInterface.RCHashRecords\x1a\x1c.ShowLibInterface.CommandMsg\"\x00(\x01\x12O\n\x0eGetRCHashCount\x12\x1c.ShowLibInterface.CommandMsg\x1a\x1d.ShowLibInterface.RecordCount\"\x00\x12U\n\x10GetRCHashRecords\x12\x1c.ShowLibInterface.CommandMsg\x1a\x1f.ShowLibInterface.RCHashRecords\"\x00\x30\x01\x12H\n\nDownLoadRC\x12\x1c.ShowLibInterface.CommandMsg\x1a\x18.ShowLibInterface.RCByte\"\x00\x30\x01\x12\x46\n\x08UpLoadRC\x12\x18.ShowLibInterface.RCByte\x1a\x1c.ShowLibInterface.CommandMsg\"\x00(\x01\x62\x06proto3')
 )
 
 
@@ -124,22 +124,22 @@ _RCHASHRECORD = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='hash', full_name='ShowLibInterface.RCHashRecord.hash', index=0,
+      name='name', full_name='ShowLibInterface.RCHashRecord.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='hash', full_name='ShowLibInterface.RCHashRecord.hash', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='name', full_name='ShowLibInterface.RCHashRecord.name', index=1,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
       name='size', full_name='ShowLibInterface.RCHashRecord.size', index=2,
-      number=4, type=9, cpp_type=9, label=1,
+      number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,

@@ -238,9 +238,35 @@ class SL_Client:
 
     def GetRCHashCount(self, stub, res):
         pass
+    def InsertDB_Signature_Records(self, recordset,dbname = None):
+        if len(recordset) == 0:
+            return
+        records = []
+        sg = SL_Signature(self.rootdir,dbname)
+        hash_list = sg.GetHashList()
+        for item in recordset:
+            # name hash size
+            bexsit = False
+            for hash in hash_list:
+                if item[1] == hash:
+                    bexsit = True
+                    self.logger.info("hash exsit name=%s hash =%s" %(item[0],item[1]))
+                    break
+            if  bexsit == True:
+                continue
+            for record in records:
+                if item[1] == record[1]:
+                    bexsit = True
+                    self.logger.info("hash exsit name=%s hash =%s" %(item[0],item[1]))
+                    break
+            if  bexsit == True:
+                continue
+            records.append(tuple(item))
+        sg.InsertDB_Records(records)
     def GetRCHashRecords(self, stub, res):
         records = []
         respoense = stub.GetRCHashRecords(res)
+        dbname = None
         for item in respoense:
             '''
             records = []
@@ -252,16 +278,20 @@ class SL_Client:
                 records.append(record)
             sg.InsertToDB(records)
             '''
+            dbname = item.header.localid
             for rec in item.record:
                 record = []
                 record.append(rec.name)
                 record.append(rec.hash)
                 record.append(rec.size)
                 records.append(record)
-        sg = SL_Signature(self.rootdir,item.header.localid)
-        print("GetRCHashRecords "+str(threading.currentThread().ident))
-        for it in records:
-            sg.InsertToDB(it)
+        if len(records) == 0:
+            return  
+        self.InsertDB_Signature_Records(records,dbname)
+        #sg = SL_Signature(self.rootdir,dbname)
+        #print("GetRCHashRecords Threadid="+str(threading.currentThread().ident))
+        #for it in records:
+        #    sg.InsertToDB(it)
         print("GetRCHashRecords end "+str(threading.currentThread().ident))
     def DownLoadRC(self, stub, res):
         pass
