@@ -162,7 +162,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         sendheader.peerid = req.header.localid
         sendheader.command = req.header.command
         sg = SL_Signature(self.rootdir)
-        ls = sg.GetRecord()
+        ls = sg.GetRecords()
         msg = "GetRCHashRecords" + " id=" +req.header.localid + " len="+str(len(ls))
         self.logger.info(msg)
         for i in range(0,len(ls)):
