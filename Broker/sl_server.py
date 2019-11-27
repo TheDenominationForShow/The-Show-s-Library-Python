@@ -205,6 +205,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         sg = SL_Signature(self.rootdir,dbname)
         hash_list = sg.GetHashList()
         for item in recordset:
+            print(item)
             # name hash size
             bexsit = False
             for hash in hash_list:
