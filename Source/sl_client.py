@@ -213,6 +213,18 @@ class SL_Client:
                             self.GetRCHashRecords(stub,res)
                             #print("cmd_subcribe_Storage")
                             pass
+                        elif res.header.command == SL_Command.cmd_publish_RC.value:
+                            self.logger.info("process_status cmd_publish_RC")
+                            #准备发布
+                            self.UpLoadRC(stub,res)
+                            #print("cmd_subcribe_Storage")
+                            pass 
+                        elif res.header.command == SL_Command.cmd_subcribe_RCHash.value:
+                            self.logger.info("process_status cmd_publish_RC")
+                            #准备发布
+                            self.DownLoadRC(stub,res)
+                            #print("cmd_subcribe_Storage")
+                            pass 
                         else:
                             print("暂未实现")
                 except grpc._channel._Rendezvous as egrpc:
@@ -309,10 +321,62 @@ class SL_Client:
         #for it in records:
         #    sg.InsertToDB(it)
         print("GetRCHashRecords end "+str(threading.currentThread().ident))
+        
     def DownLoadRC(self, stub, res):
-        pass
+        lastid = 0
+        sg = SL_Signature(self.rootdir, dbname = item.header.localid)
+        record = sg.GetRecord_byHash(item.hash[0])
+        respoense = stub.DownLoadRC(res):
+            halfpath = self.rootdir+os.sep+".showlib"+os.sep+ item.hash[0]
+            fullpath += ".tmp"
+            with open(fullpath,'rb') as f:
+                for filebytes in respoense:
+                    item = filebytes.rcByte
+                    if item.blockid != 0:
+                        if(item.blockid != lastid):
+                            print(item.blockid)
+                    f.write(item.block)
+            if str(os.stat(fullpath).st_size) == str(record[3]):
+                os.rename(fullpath, halfpath)
+                msg = "DownLoadRC success name="+record[0]+" hash="+record[2]
+                print(msg)
+                self.logger.info(msg)
+            else:
+                os.remove(fullpath)
+                msg = "DownLoadRC failed name="+record[0]+" hash="+record[2]
+                print(msg)
+                self.logger.info(msg)
+    def readFile(self,res):
+        sendheader = ShowLibInterface_pb2.MsgHeader(res.header)
+        sendheader.senssionid = res.header.senssionid
+        sendheader.localid = self.cfg.uuid
+        sendheader.peerid = res.header.localid
+        sendheader.command = res.header.command
+        id = 0
+        if len(res.hash) == 0:
+            rcbyte = ShowLibInterface_pb2.RCByte(blockid = id, bytes = []) 
+            yield ShowLibInterface_pb2.FileBlock(header = sendheader, hash = res.hash[0] ,rcByte = rcbyte)
+            return
+        st = SL_Storage(self.rootdir)
+        path_ls = st.Get_RCPath_byHash(res.hash[0])
+        if len(path_ls) == 0:
+            rcbyte = ShowLibInterface_pb2.RCByte(blockid = id, bytes = []) 
+            yield ShowLibInterface_pb2.FileBlock(header = sendheader, hash = res.hash[0] ,rcByte = rcbyte)
+            return
+
+        with open(path_ls[0],'rb') as f:
+            while True:
+                block = f.read(4096)  
+                if block:
+                    rcbyte = ShowLibInterface_pb2.RCByte(blockid = id, bytes = block) 
+                    yield ShowLibInterface_pb2.FileBlock(header = sendheader, hash = res.hash[0] ,rcByte = rcbyte)
+                else:
+                    break
+                id = id+1
     def UpLoadRC(self, stub, res):
-        pass
+        iter = self.readFile(res)
+        res = stub.UpLoadRC(iter)
+        print(res)
 if __name__ == "__main__" :
     # 使用xx.py xxx路径
     old = datetime.datetime.now()

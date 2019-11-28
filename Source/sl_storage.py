@@ -235,6 +235,12 @@ class SL_Storage:
         print('冗余大小约为 %d B == %d M == %d G' %(sizeCount,sizeM,sizeg))
     def ShowRepeatNameRC(self) :
         pass
+    def Get_RCPath_byHash(self, hash):
+        l = []
+        for row in self.conn.execute(''' SELECT path FROM StorageLib where hash = ? ''',hash):
+            l.append(row[0])
+        self.conn.commit()
+        return l
 if __name__ == "__main__" :
     # 使用xx.py xxx路径
     old = datetime.datetime.now()

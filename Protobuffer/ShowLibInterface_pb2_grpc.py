@@ -47,11 +47,11 @@ class showlibifStub(object):
     self.DownLoadRC = channel.unary_stream(
         '/ShowLibInterface.showlibif/DownLoadRC',
         request_serializer=ShowLibInterface__pb2.CommandMsg.SerializeToString,
-        response_deserializer=ShowLibInterface__pb2.RCByte.FromString,
+        response_deserializer=ShowLibInterface__pb2.FileBlock.FromString,
         )
     self.UpLoadRC = channel.stream_unary(
         '/ShowLibInterface.showlibif/UpLoadRC',
-        request_serializer=ShowLibInterface__pb2.RCByte.SerializeToString,
+        request_serializer=ShowLibInterface__pb2.FileBlock.SerializeToString,
         response_deserializer=ShowLibInterface__pb2.CommandMsg.FromString,
         )
 
@@ -152,11 +152,11 @@ def add_showlibifServicer_to_server(servicer, server):
       'DownLoadRC': grpc.unary_stream_rpc_method_handler(
           servicer.DownLoadRC,
           request_deserializer=ShowLibInterface__pb2.CommandMsg.FromString,
-          response_serializer=ShowLibInterface__pb2.RCByte.SerializeToString,
+          response_serializer=ShowLibInterface__pb2.FileBlock.SerializeToString,
       ),
       'UpLoadRC': grpc.stream_unary_rpc_method_handler(
           servicer.UpLoadRC,
-          request_deserializer=ShowLibInterface__pb2.RCByte.FromString,
+          request_deserializer=ShowLibInterface__pb2.FileBlock.FromString,
           response_serializer=ShowLibInterface__pb2.CommandMsg.SerializeToString,
       ),
   }

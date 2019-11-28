@@ -18,9 +18,9 @@ service showlibif {
   // 获取签名
   rpc GetRCHashRecords (CommandMsg) returns (stream RCHashRecords) {}
   //下载资源
-  rpc DownLoadRC (CommandMsg) returns (stream RCByte) {}
+  rpc DownLoadRC (CommandMsg) returns (stream FileBlock) {}
   //上传资源
-  rpc UpLoadRC(stream RCByte) returns (CommandMsg) {}
+  rpc UpLoadRC(stream FileBlock) returns (CommandMsg) {}
 }
 message MsgHeader{
   string  localid = 1;
@@ -49,6 +49,12 @@ message RCHashRecords {
 message RecordCount{
   MsgHeader header = 1;
   int32 Count = 2;
+}
+
+message FileBlock{
+  MsgHeader hader = 1;
+  string    hash = 2;
+  RCByte    rcByte = 3;
 }
 
 message RCByte{

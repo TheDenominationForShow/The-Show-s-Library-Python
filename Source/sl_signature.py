@@ -121,6 +121,18 @@ class SL_Signature:
         ls = self.cur.fetchall()
         self.conn.commit()
         return ls
+    def GetFileName_byHash(self, hash):
+        name = None
+        for row in self.conn.execute(''' SELECT name FROM SignatureLib where hash = ? ''',hash):
+            name = row[0]
+        self.conn.commit()
+        return name
+    def GetRecord_byHash(self,hash):
+        ls = []
+        for row in self.conn.execute(''' SELECT name,hash,size FROM SignatureLib where hash = ? ''',hash):
+            ls.append(row)
+        self.conn.commit()
+        return ls
     def TraversePathAndGenRecord(self,root_path = None):
         #编译路径，存库
         RootPath = os.path.abspath(self.rootdir)

@@ -180,7 +180,35 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
     def DownLoadRC(self,request, context):
         pass
     def UpLoadRC(self, request_iterator, context):
-        pass
+        halfpath = None
+        fullpath = None
+        f = None
+        record = None
+        lastid = 0
+        for filebytes in request_iterator:
+            if filebytes.rcByte.blockid == 0:
+                #在第一个包确定路径等
+                sg = SL_Signature(self.rootdir)
+                record = sg.GetRecord_byHash(item.hash[0])
+                halfpath = self.rootdir+os.sep+".showlib"+os.sep+ item.hash[0]    
+                fullpath += ".tmp"
+                f = open(fullpath,'wb')
+            item = filebytes.rcByte
+            if item.blockid != 0:
+                if(item.blockid != lastid):
+                    print(item.hash[0]+"块错误" +str(item.blockid))
+                    lastid = item.blockid
+            f.write(item.block)
+        if str(os.stat(fullpath).st_size) == str(record[3]):
+                os.rename(fullpath, halfpath)
+                msg = "DownLoadRC success name="+record[0]+" hash="+record[2]
+                print(msg)
+                self.logger.info(msg)
+            else:
+                os.remove(fullpath)
+                msg = "DownLoadRC failed name="+record[0]+" hash="+record[2]
+                print(msg)
+                self.logger.info(msg)
     def run(self):
         if len(self.cfg.brokers) == 0:
             print("broker配置错误，请到配置文件中添加")
