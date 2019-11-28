@@ -13,8 +13,18 @@ setup.py 暂时还不需要去写，另外
         * python -m pip install grpcio  
         * python -m pip install grpcio-tools 这个用来安装protobuf
 * 下载 `git clone 本项目.git`，并进入到Souce目录
-* 启动命令 `python  sl_client.py "库目录" "start"`  第一次扫描可能会慢，之后都是轻量增加文件都是飞速的
+* 启动命令 `python  sl_client.py "库目录" "start"`  第一次扫描可能会慢(`目前速度可接受`)，之后都是轻量增加文件都是飞速的
 * 输入 `stop` 等待退出
+
+## 部署
+### 具体步骤
+* 首先配置python环境
+    * 安装python3 version >= 3.5
+    * 安装 gRPC依赖:
+        * python -m pip install grpcio  
+        * python -m pip install grpcio-tools 这个用来安装protobuf
+* 下载 `git clone 本项目.git`，并进入到Broker目录
+* sudo nohup python -u sl_server.py "." "start" > nohup.out 2>&1 &
 
 ### 配置
 
@@ -43,23 +53,15 @@ setup.py 暂时还不需要去写，另外
 </root>
 ```
 
-## 遗留
-
-之后使用 sl_storage.py脚本进行操作，命令大致为  sl_storage.py "文件路径" "调用方法"
-
-* sl_storage.py "G:\\图书馆" "scan"  扫描文件夹，生成索引库必须先走这一步
-
-* sl_storage.py "G:\\图书馆" "ShowRepeatHashRC 显示签名相同的资源，统计冗余文件占用
-
 ## 性能
+
+### 当前性能
+当前  扫描速度为  100m/s
+### 记录
 
 * 今天550个g的视频和图片，扫描了接近两个小时，推算效率为5g/min----80m/s（`约为机械移动磁盘性能瓶颈`），所以仓库太大，第一次初始化会比较慢。
     * `但是普通的pdf资源完全没问题哦`
 
-sudo nohup python -u sl_server.py "." "start" > nohup.out 2>&1 &
-Generate gRPC code
-python -m grpc_tools.protoc -I../../protos --python_out=. --grpc_python_out=. ../../protos/helloworld.proto
-python -m grpc_tools.protoc -I.  --python_out=.  --grpc_python_out=.  ShowLibInterface.proto
 > 今天扫描照片库，大约4g的大小，2400个文件。耗时11分钟，平均每秒6m
 
 * ShowLib scan storage end    2019-11-25 23:42:27.906408  耗时0:11:58.923699
@@ -80,11 +82,13 @@ python -m grpc_tools.protoc -I.  --python_out=.  --grpc_python_out=.  ShowLibInt
     * no sqlite && sha1 ShowLib         ShowLib scan storage end    2019-11-26 14:06:56.842025  耗时0:01:57.891734(0,)
     * no sqlite && sha1 && mmap         ShowLib scan storage end    2019-11-26 14:13:42.983007  耗时0:02:12.974503 (0,)
 * 11-27 23:51 台式8i7 移动硬盘 16g内存
-    * 优化版本        生活大爆炸 10.3g 80个视频文件 ShowLib scan storage end    2019-11-27 23:47:45.113670  耗时0:01:40.441695 新扫描仓库资源 count =86
-    * 优化版本        4g杂项图片 2000个      ShowLib scan storage end    2019-11-27 23:59:59.056955  耗时0:00:41.412974 新扫描仓库资源 count =2438
-    
+    * 优化版本        生活大爆炸 10.3g 80个视频文件  2019-11-27 23:47:45.113670  耗时0:01:40.441695 新扫描仓库资源 count =86
+    * 优化版本        4g杂项图片 2000个    2019-11-27 23:59:59.056955  耗时0:00:41.412974 新扫描仓库资源 count =2438
+* 11-28 11:10 笔记本电脑 5200转 3代i5 8g内存
+    * 优化版本 5.8g 17000个文件       2019-11-28 11:10:10.692935  耗时0:03:08.833637 新扫描仓库资源 count =17007
 ## 测试
 
+### 客户端测试
 在客户端生成的config.xml `brokers`中添加下测试borker `23.105.207.122` 重启即可进行签名的上传和下载
 ```xml
 <brokers>
@@ -94,3 +98,17 @@ python -m grpc_tools.protoc -I.  --python_out=.  --grpc_python_out=.  ShowLibInt
     </broker>
 </brokers>
 ```
+### 仓库脚本测试（过期）
+
+之后使用 sl_storage.py脚本进行操作，命令大致为  sl_storage.py "文件路径" "调用方法"
+
+* sl_storage.py "G:\\图书馆" "scan"  扫描文件夹，生成索引库必须先走这一步
+
+* sl_storage.py "G:\\图书馆" "ShowRepeatHashRC 显示签名相同的资源，统计冗余文件占用
+
+## 开发
+
+* Generate gRPC code
+    * python -m grpc_tools.protoc -I../../protos --python_out=. --grpc_python_out=. ../../protos/helloworld.proto
+    * python -m grpc_tools.protoc -I.  --python_out=.  --grpc_python_out=.  ShowLibInterface.proto
+

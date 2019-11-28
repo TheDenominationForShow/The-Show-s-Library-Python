@@ -23,7 +23,7 @@ class SL_Client:
         self.logger = logging.getLogger("Client")
         fileHandler = logging.FileHandler(
             filename='Client.log', encoding="utf-8")
-        formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+        formatter = logging.Formatter("%(asctime)s -[%(thread)d] - %(levelname)s: %(message)s  -[%(filename)s:%(lineno)d]")
         fileHandler.setFormatter(formatter)
         self.logger.addHandler(fileHandler)
         self.logger.setLevel(logging.INFO)
@@ -108,7 +108,7 @@ class SL_Client:
                 sendheader.command = SL_Command.cmd_hello.value
                 l = []
                 print(sendheader)
-                response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
+                response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=20)
                 if response.header.command == SL_Command.cmd_hello_deny.value:
                     msg = "cmd_hello_deny error id = " +(self.cfg.brokers[0].uuid)
                     print(msg)
@@ -116,7 +116,7 @@ class SL_Client:
                     return Falsel.append()
                 sendheader.command = SL_Command.cmd_subcribe_Storage.value
                 print(sendheader)
-                response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
+                response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=20)
                 sendheader.command = SL_Command.cmd_publish_RCHashRecords.value
                 print(sendheader)
                 response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = l),timeout=10)
@@ -162,22 +162,31 @@ class SL_Client:
         #向服务器询问是否有事件需要处理
         last_command = SL_Command.cmd_empty.value
         while self.run_flag:
-            connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
-            with grpc.insecure_channel(connectStr) as channel:
-                stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
-                sendheader = ShowLibInterface_pb2.MsgHeader()
-                sendheader.senssionid = 0
-                sendheader.localid = self.cfg.uuid
-                sendheader.peerid = self.cfg.brokers[0].uuid
-                sendheader.command = int(SL_Command.cmd_request.value)
-                response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = []))
-                if response.header.command != last_command:
-                    self.logger.info("recv command.value = "+str(response.header.command))
-                    last_command = response.header.command
-                    pass
-                if response.header.command != SL_Command.cmd_empty.value:
-                    self.queue.put(response)
-            time.sleep(10)
+            try:
+                connectStr = self.cfg.brokers[0].ip+":"+self.cfg.brokers[0].port
+                with grpc.insecure_channel(connectStr) as channel:
+                    stub = ShowLibInterface_pb2_grpc.showlibifStub(channel)
+                    sendheader = ShowLibInterface_pb2.MsgHeader()
+                    sendheader.senssionid = 0
+                    sendheader.localid = self.cfg.uuid
+                    sendheader.peerid = self.cfg.brokers[0].uuid
+                    sendheader.command = int(SL_Command.cmd_request.value)
+                    response = stub.command(ShowLibInterface_pb2.CommandMsg(header = sendheader,hash = []))
+                    if response.header.command != last_command:
+                        self.logger.info("recv command.value = "+str(response.header.command))
+                        last_command = response.header.command
+                        pass
+                    if response.header.command != SL_Command.cmd_empty.value:
+                        self.queue.put(response)
+            except grpc._channel._Rendezvous as egrpc:
+                self.logger.error(egrpc.details)
+                self.logger.error(egrpc.debug_error_string)
+            except Exception as e:
+                print(e)
+                self.logger.info(e)
+                msg = "SL_Client recv Exception"
+                print(msg)
+                self.logger.info(msg)
         self.logger.info("recv end")
     def process(self):
         self.logger.info("process start")
@@ -262,13 +271,7 @@ class SL_Client:
                     break
             if  bexsit == True:
                 continue
-            for record in records:
-                if item[1] == record[1]:
-                    bexsit = True
-                    self.logger.info("hash exsit name=%s hash =%s" %(item[0],item[1]))
-                    break
-            if  bexsit == True:
-                continue
+            hash_list.append(tuple(item))
             records.append(tuple(item))
         sg.InsertDB_Records(records)
     def GetRCHashRecords(self, stub, res):

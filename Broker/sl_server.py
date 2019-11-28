@@ -24,7 +24,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         self.logger = logging.getLogger("Server")
         fileHandler = logging.FileHandler(
             filename='Server.log', encoding="utf-8")
-        formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+        formatter = logging.Formatter("%(asctime)s -[%(thread)d] - %(levelname)s: %(message)s  -[%(filename)s:%(lineno)d]")
         fileHandler.setFormatter(formatter)
         self.logger.addHandler(fileHandler)
         self.logger.setLevel(logging.INFO)
@@ -213,13 +213,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
                     break
             if  bexsit == True:
                 continue
-            for record in records:
-                if item[1] == record[1]:
-                    bexsit = True
-                    self.logger.info("hash exsit name=%s hash =%s" %(item[0],item[1]))
-                    break
-            if  bexsit == True:
-                continue
+            hash_list.append(tuple(item))
             records.append(tuple(item))
         sg.InsertDB_Records(records)
 if __name__ == "__main__" :
