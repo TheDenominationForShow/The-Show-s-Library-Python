@@ -248,7 +248,7 @@ class SL_Client:
             #因为是sqlite，基本入库自动转换
             size = str(ls[i][2])
             retl.append(ShowLibInterface_pb2.RCHashRecord(name = ls[i][0],hash = ls[i][1],size = size ))
-            if len(retl) == 512:
+            if len(retl) == 1024:
                 yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
                 retl = []
         if len(retl):

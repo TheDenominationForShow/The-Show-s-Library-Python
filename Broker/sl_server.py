@@ -169,7 +169,7 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         for i in range(0,len(ls)):
             size = str(ls[i][2])
             retl.append(ShowLibInterface_pb2.RCHashRecord(name = ls[i][0],hash = ls[i][1],size = size ))
-            if len(retl) == 512:
+            if len(retl) == 1024:
                 yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
                 retl = []
         if len(retl):
