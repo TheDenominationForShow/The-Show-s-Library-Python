@@ -165,11 +165,14 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         ls = sg.GetRecords()
         msg = "GetRCHashRecords" + " id=" +req.header.localid + " len="+str(len(ls))
         self.logger.info(msg)
+        retl = []
         for i in range(0,len(ls)):
-            retl = []
             size = str(ls[i][2])
-            re = ShowLibInterface_pb2.RCHashRecord( name = ls[i][0],hash = ls[i][1],size = size )
-            retl.append(re)
+            retl.append(ShowLibInterface_pb2.RCHashRecord(name = ls[i][0],hash = ls[i][1],size = size ))
+            if len(retl) == 512:
+                yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
+                retl = []
+        if len(retl):
             yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
     def GetRCHashRecords(self,request, context):
         iter = self.GenRecord(request)

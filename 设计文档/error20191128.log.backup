@@ -1,0 +1,228 @@
+2019-11-28 10:46:14,111 -[307336] - INFO: process_status cmd_subcribe_Storage  -[sl_client.py:209]
+2019-11-28 10:46:45,739 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Stream removed"
+	debug_error_string = "{"created":"@1574909205.739000000","description":"Error received from peer ipv4:23.105.207.122:50051","file":"src/core/lib/surface/call.cc","file_line":1055,"grpc_message":"Stream removed","grpc_status":2}"
+>>  -[sl_client.py:182]
+2019-11-28 10:46:45,739 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Stream removed"
+	debug_error_string = "{"created":"@1574909205.739000000","description":"Error received from peer ipv4:23.105.207.122:50051","file":"src/core/lib/surface/call.cc","file_line":1055,"grpc_message":"Stream removed","grpc_status":2}"
+>>  -[sl_client.py:183]
+2019-11-28 10:46:45,739 -[307336] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Stream removed"
+	debug_error_string = "{"created":"@1574909205.739000000","description":"Error received from peer ipv4:23.105.207.122:50051","file":"src/core/lib/surface/call.cc","file_line":1055,"grpc_message":"Stream removed","grpc_status":2}"
+>>  -[sl_client.py:217]
+2019-11-28 10:46:45,740 -[307336] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Stream removed"
+	debug_error_string = "{"created":"@1574909205.739000000","description":"Error received from peer ipv4:23.105.207.122:50051","file":"src/core/lib/surface/call.cc","file_line":1055,"grpc_message":"Stream removed","grpc_status":2}"
+>>  -[sl_client.py:218]
+2019-11-28 10:46:45,740 -[307336] - INFO: process_status cmd_publish_RCHashRecords  -[sl_client.py:204]
+2019-11-28 10:47:20,183 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Stream removed"
+	debug_error_string = "{"created":"@1574909240.183000000","description":"Error received from peer ipv4:23.105.207.122:50051","file":"src/core/lib/surface/call.cc","file_line":1055,"grpc_message":"Stream removed","grpc_status":2}"
+>>  -[sl_client.py:182]
+2019-11-28 10:47:20,184 -[307336] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Stream removed"
+	debug_error_string = "{"created":"@1574909240.183000000","description":"Error received from peer ipv4:23.105.207.122:50051","file":"src/core/lib/surface/call.cc","file_line":1055,"grpc_message":"Stream removed","grpc_status":2}"
+>>  -[sl_client.py:217]
+2019-11-28 10:47:20,184 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Stream removed"
+	debug_error_string = "{"created":"@1574909240.183000000","description":"Error received from peer ipv4:23.105.207.122:50051","file":"src/core/lib/surface/call.cc","file_line":1055,"grpc_message":"Stream removed","grpc_status":2}"
+>>  -[sl_client.py:183]
+2019-11-28 10:47:20,184 -[307336] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Stream removed"
+	debug_error_string = "{"created":"@1574909240.183000000","description":"Error received from peer ipv4:23.105.207.122:50051","file":"src/core/lib/surface/call.cc","file_line":1055,"grpc_message":"Stream removed","grpc_status":2}"
+>>  -[sl_client.py:218]
+2019-11-28 10:47:20,185 -[307336] - INFO: process_status sleep  -[sl_client.py:224]
+2019-11-28 10:48:24,958 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909304.957000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909304.957000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:24,958 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909304.957000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909304.957000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:26,609 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909306.608000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909306.608000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:26,609 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909306.608000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909306.608000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:28,452 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909308.451000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909308.451000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:28,452 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909308.451000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909308.451000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:29,971 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909309.970000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909309.970000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:29,971 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909309.970000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909309.970000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:43,537 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909323.537000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909323.537000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:43,538 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909323.537000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909323.537000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:45,081 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909325.080000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909325.080000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:45,081 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909325.080000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909325.080000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:46,594 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909326.594000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909326.594000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:46,594 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909326.594000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909326.594000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:48,109 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909328.108000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909328.108000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:48,109 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909328.108000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909328.108000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:49,638 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909329.638000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909329.638000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:49,639 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909329.638000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909329.638000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:51,155 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909331.155000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909331.155000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:51,156 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909331.155000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909331.155000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:52,667 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909332.667000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909332.667000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:52,668 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909332.667000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909332.667000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:54,219 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909334.218000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909334.218000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:54,219 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909334.218000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909334.218000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:55,798 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909335.797000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909335.797000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:55,798 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909335.797000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909335.797000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:57,498 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909337.497000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909337.497000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:57,498 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909337.497000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909337.497000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:48:59,202 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909339.201000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909339.201000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:48:59,202 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909339.201000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909339.201000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:49:00,877 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909340.876000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909340.876000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:49:00,877 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909340.876000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909340.876000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:49:02,610 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909342.609000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909342.609000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:49:02,610 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909342.609000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909342.609000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:49:04,294 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909344.294000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909344.294000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]
+2019-11-28 10:49:04,294 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.debug_error_string of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909344.294000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909344.294000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:183]
+2019-11-28 10:49:05,965 -[312256] - ERROR: <bound method _SingleThreadedRendezvous.details of <_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1574909345.964000000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3934,"referenced_errors":[{"created":"@1574909345.964000000","description":"failed to connect to all addresses","file":"src/core/ext/filters/client_channel/lb_policy/pick_first/pick_first.cc","file_line":393,"grpc_status":14}]}"
+>>  -[sl_client.py:182]

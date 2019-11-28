@@ -241,13 +241,16 @@ class SL_Client:
         sendheader.peerid = res.header.localid
         sendheader.command = res.header.command
         ls = self.Get_local_SignatureRecord()
+        retl = []
         for i in range(0,len(ls)):
-            retl = []
             #因为是sqlite，基本入库自动转换
             size = str(ls[i][2])
             retl.append(ShowLibInterface_pb2.RCHashRecord(name = ls[i][0],hash = ls[i][1],size = size ))
+            if len(retl) == 512:
+                yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
+                retl = []
+        if len(retl):
             yield ShowLibInterface_pb2.RCHashRecords(header = sendheader, record = retl)
-
     def PulishRCHashRecords(self, stub, res):
         iter = self.GetRecord(res)
         respoense = stub.PulishRCHashRecords(iter)
