@@ -187,6 +187,8 @@ class SL_Client:
                 msg = "SL_Client recv Exception"
                 print(msg)
                 self.logger.info(msg)
+            if self.queue.empty() != True:
+                time.sleep(3)
         self.logger.info("recv end")
     def process(self):
         self.logger.info("process start")
