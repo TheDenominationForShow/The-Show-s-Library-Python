@@ -390,10 +390,14 @@ if __name__ == "__main__" :
         f.start()
         run_flag = True
         while run_flag:
-            stop = input("输入 stop 停止:")
-            if stop == "stop":
+            cmd = input("输入 stop 停止:")
+            if cmd == "stop":
                 f.stop()
                 run_flag = False
+            elif cmd[0:3] == "sub":
+                cmd[4:]
+            elif cmd[0:3] == "pub":
+                pass
             else:
                 print("未知命令")
     else:

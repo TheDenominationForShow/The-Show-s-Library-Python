@@ -177,9 +177,38 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
     def GetRCHashRecords(self,request, context):
         iter = self.GenRecord(request)
         return  iter 
+    def readFile(self,res):
+        sendheader = ShowLibInterface_pb2.MsgHeader(res.header)
+        sendheader.senssionid = res.header.senssionid
+        sendheader.localid = self.cfg.uuid
+        sendheader.peerid = res.header.localid
+        sendheader.command = res.header.command
+        id = 0
+        if len(res.hash) == 0:
+            rcbyte = ShowLibInterface_pb2.RCByte(blockid = id, bytes = []) 
+            yield ShowLibInterface_pb2.FileBlock(header = sendheader, hash = res.hash[0] ,rcByte = rcbyte)
+            return
+        st = SL_Storage(self.rootdir)
+        path_ls = st.Get_RCPath_byHash(res.hash[0])
+        if len(path_ls) == 0:
+            rcbyte = ShowLibInterface_pb2.RCByte(blockid = id, bytes = []) 
+            yield ShowLibInterface_pb2.FileBlock(header = sendheader, hash = res.hash[0] ,rcByte = rcbyte)
+            return
+        with open(path_ls[0],'rb') as f:
+            while True:
+                block = f.read(4096)  
+                if block:
+                    rcbyte = ShowLibInterface_pb2.RCByte(blockid = id, bytes = block) 
+                    yield ShowLibInterface_pb2.FileBlock(header = sendheader, hash = res.hash[0] ,rcByte = rcbyte)
+                else:
+                    break
+                id = id+1
     def DownLoadRC(self,request, context):
-        pass
+        return self.readFile(request)
+        
     def UpLoadRC(self, request_iterator, context):
+        sendheader = ShowLibInterface_pb2.MsgHeader(res.header)
+        hash_ls = []
         halfpath = None
         fullpath = None
         f = None
@@ -188,9 +217,15 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
         for filebytes in request_iterator:
             if filebytes.rcByte.blockid == 0:
                 #在第一个包确定路径等
+                header = filebytes.header
+                sendheader.senssionid = header.senssionid
+                sendheader.localid = self.cfg.uuid
+                sendheader.peerid = header.localid
+                sendheader.command = header.command
+                hash_ls.append(filebytes.hash)
                 sg = SL_Signature(self.rootdir)
-                record = sg.GetRecord_byHash(item.hash[0])
-                halfpath = self.rootdir+os.sep+".showlib"+os.sep+ item.hash[0]    
+                record = sg.GetRecord_byHash(filebytes.hash)
+                halfpath = self.rootdir+os.sep+".showlib"+os.sep+ filebytes.hash    
                 fullpath += ".tmp"
                 f = open(fullpath,'wb')
             item = filebytes.rcByte
@@ -199,16 +234,19 @@ class SL_Server(ShowLibInterface_pb2_grpc.showlibifServicer):
                     print(item.hash[0]+"块错误" +str(item.blockid))
                     lastid = item.blockid
             f.write(item.block)
+        if f != None:
+            f.close()
         if str(os.stat(fullpath).st_size) == str(record[3]):
-                os.rename(fullpath, halfpath)
-                msg = "DownLoadRC success name="+record[0]+" hash="+record[2]
-                print(msg)
-                self.logger.info(msg)
-            else:
-                os.remove(fullpath)
-                msg = "DownLoadRC failed name="+record[0]+" hash="+record[2]
-                print(msg)
-                self.logger.info(msg)
+            os.rename(fullpath, halfpath)
+            msg = "DownLoadRC success name="+record[0]+" hash="+record[2]
+            print(msg)
+            self.logger.info(msg)
+        else:
+            os.remove(fullpath)
+            msg = "DownLoadRC failed name="+record[0]+" hash="+record[2]
+            print(msg)
+            self.logger.info(msg)
+        return ShowLibInterface_pb2.CommandMsg(header = sendheader,hash=hash_ls)
     def run(self):
         if len(self.cfg.brokers) == 0:
             print("broker配置错误，请到配置文件中添加")
